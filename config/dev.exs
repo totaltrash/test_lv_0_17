@@ -2,9 +2,9 @@ import Config
 
 # Configure your database
 config :my_app, MyApp.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "my_app_dev",
+  username: "dblack",
+  password: "dblack",
+  database: "liveview_g_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
