@@ -26,6 +26,11 @@ defmodule MyAppWeb.Page do
     end
   end
 
+  defp hide_profile_menu(js \\ %JS{}) do
+    js
+    |> JS.hide(to: "#profile-menu", transition: "fade-out-scale")
+  end
+
   def wrapper(assigns) do
     ~H"""
     <div class="min-h-full">
@@ -74,7 +79,7 @@ defmodule MyAppWeb.Page do
                       From: "transform opacity-100 scale-100"
                       To: "transform opacity-0 scale-95"
                   -->
-                  <div phx-click-away={JS.hide(to: "#profile-menu", transition: "fade-out-scale")} id="profile-menu" class="hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+                  <div phx-remove={hide_profile_menu()} phx-click-away={hide_profile_menu()} id="profile-menu" class="hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
                     <!-- Active: "bg-gray-100", Not Active: "" -->
                     <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
 
