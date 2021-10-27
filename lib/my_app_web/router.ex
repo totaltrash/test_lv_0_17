@@ -19,6 +19,7 @@ defmodule MyAppWeb.Router do
 
     live "/", HomeLive, :index
     live "/todo", TodoLive, :index
+    live "/todo/modal", TodoLive, :show_modal
 
     # live_session :default do
     #   live "/", HomeLive, :index

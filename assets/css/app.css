@@ -10,6 +10,14 @@
   animation: 75ms ease-in 0s normal forwards 1 fade-out-scale-keys;
 }
 
+.fade-in {
+  animation: 100ms ease-out 0s normal forwards 1 fade-in-keys;
+}
+
+.fade-out {
+  animation: 75ms ease-in 0s normal forwards 1 fade-out-keys;
+}
+
 @keyframes fade-in-scale-keys {
   from {
       opacity: 0;
@@ -29,5 +37,23 @@
   to {
       opacity: 0;
       transform: scale(.95, .95);
+  }
+}
+
+@keyframes fade-in-keys {
+  from {
+      opacity: 0;
+  }
+  to {
+      opacity: 1;
+  }
+}
+
+@keyframes fade-out-keys {
+  from {
+      opacity: 1;
+  }
+  to {
+      opacity: 0;
   }
 }
