@@ -31,11 +31,17 @@ defmodule MyAppWeb.Page do
     |> JS.hide(to: "#profile-menu", transition: "fade-out-scale")
   end
 
+  defp on_remove(js \\ %JS{}) do
+    js
+    |> JS.hide(to: "#page-main", transition: "fade-out", time: 75)
+    |> JS.hide(to: "#page-title", transition: "fade-out", time: 75)
+  end
+
   def wrapper(assigns) do
     ~H"""
     <div
       class="min-h-full"
-      phx-remove={JS.hide(to: "#page-main", transition: "fade-out") |> JS.hide(to: "#page-header", transition: "fade-out")}
+      phx-remove={on_remove()}
     >
       <nav class="bg-gray-800">
         <div class="px-4 sm:px-6 lg:px-8">
@@ -155,7 +161,7 @@ defmodule MyAppWeb.Page do
 
       <header class="bg-white shadow">
         <div class="py-6 px-4 sm:px-6 lg:px-8">
-          <h1 id="page-header" class="fade-in text-3xl font-bold text-gray-900">
+          <h1 id="page-title" class="fade-in text-3xl font-bold text-gray-900">
             <%= @title %>
           </h1>
         </div>
