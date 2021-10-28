@@ -33,7 +33,10 @@ defmodule MyAppWeb.Page do
 
   def wrapper(assigns) do
     ~H"""
-    <div class="min-h-full">
+    <div
+      class="min-h-full"
+      phx-remove={JS.hide(to: "#page-main", transition: "fade-out") |> JS.hide(to: "#page-header", transition: "fade-out")}
+    >
       <nav class="bg-gray-800">
         <div class="px-4 sm:px-6 lg:px-8">
           <div class="flex items-center justify-between h-16">
@@ -150,15 +153,15 @@ defmodule MyAppWeb.Page do
         </div>
       </nav>
 
-      <header class="bg-white shadow">
+      <header id="page-header" class="fade-in bg-white shadow">
         <div class="py-6 px-4 sm:px-6 lg:px-8">
           <h1 class="text-3xl font-bold text-gray-900">
             <%= @title %>
           </h1>
         </div>
       </header>
-      <main>
-        <div class="py-6 sm:px-6 lg:px-8">
+      <main id="page-main">
+        <div class="fade-in py-6 sm:px-6 lg:px-8">
           <%= render_slot(@inner_block) %>
         </div>
       </main>
