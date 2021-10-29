@@ -4,8 +4,26 @@ defmodule MyAppWeb.Modal do
 
   defp hide_modal(js \\ %JS{}) do
     js
-    |> JS.hide(to: "#confirm-modal", transition: "fade-out-scale")
-    |> JS.hide(to: "#confirm-modal-overlay", transition: "fade-out")
+    |> JS.hide(
+      to: "#confirm-modal-overlay",
+      transition: "fade-out"
+      # the following does not work when setting 'fade-in' on #confirm-modal-overlay
+      # transition: {
+      #   "ease-in duration-200",
+      #   "opacity-100",
+      #   "opacity-0"
+      # }
+    )
+    |> JS.hide(
+      to: "#confirm-modal",
+      transition: "fade-out-scale"
+      # the following does not work when setting 'fade-in-scale' on #confirm-modal
+      # transition: {
+      #   "ease-in duration-200",
+      #   "opacity-100 translate-y-0 sm:scale-100",
+      #   "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+      # }
+    )
   end
 
   def confirm_modal(assigns) do
