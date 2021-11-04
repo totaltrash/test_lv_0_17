@@ -30,7 +30,7 @@ defmodule MyAppWeb.Toast do
         <.icon name={get_icon(@toast.type)} type="solid" class="h-6 w-6" />
         <%= @toast.message %>
       </div>
-      <button class="focus:outline-none"
+      <button class="focus:outline-none hover:bg-gray-100 p-1"
         type="button"
         aria-label="Dismiss"
         phx-click="clear_toast"

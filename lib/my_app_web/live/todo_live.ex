@@ -14,7 +14,7 @@ defmodule MyAppWeb.TodoLive do
 
   def render(assigns) do
     button_base_classes =
-      "flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white md:py-4 md:text-lg md:px-10"
+      "flex items-center justify-center px-4 py-2 border border-transparent text-base font-medium rounded text-white md:py-3 md:text-lg md:px-6"
 
     ~H"""
     <Page.wrapper current_menu="todo" title="To Do">
