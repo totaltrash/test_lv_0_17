@@ -79,12 +79,6 @@ defmodule MyAppWeb.TodoLive do
     {:noreply, socket}
   end
 
-  defp add_toast(socket, type, message) do
-    send(self(), {:add_toast, %{type: type, message: message}})
-
-    socket
-  end
-
   def handle_event("modal_confirm", _, socket) do
     socket =
       socket
@@ -138,5 +132,11 @@ defmodule MyAppWeb.TodoLive do
       )
 
     {:noreply, socket}
+  end
+
+  defp add_toast(socket, type, message) do
+    send(self(), {:add_toast, %{type: type, message: message}})
+
+    socket
   end
 end

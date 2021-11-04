@@ -1,6 +1,7 @@
 defmodule MyAppWeb.Toast do
   use Phoenix.Component
   alias Phoenix.LiveView.JS
+  import Heroicons.LiveView
 
   def toaster(assigns) do
     ~H"""
@@ -25,7 +26,8 @@ defmodule MyAppWeb.Toast do
       phx-hook="Toast"
       phx-remove={JS.hide(to: "#toast-#{to_string(@toast.id)}", transition: "fade-out", time: 200)}
     >
-      <div>
+      <div class="flex items-center gap-2">
+        <.icon name={get_icon(@toast.type)} type="solid" class="h-6 w-6" />
         <%= @toast.message %>
       </div>
       <button class="focus:outline-none"
@@ -34,13 +36,7 @@ defmodule MyAppWeb.Toast do
         phx-click="clear_toast"
         phx-value-id={@toast.id}
       >
-        <svg class="fill-current"
-          width="16"
-          height="16"
-          viewBox="0 0 32 32"
-        >
-          <path d="M6.869 6.869c0.625-0.625 1.638-0.625 2.263 0l6.869 6.869 6.869-6.869c0.625-0.625 1.638-0.625 2.263 0s0.625 1.638 0 2.263l-6.869 6.869 6.869 6.869c0.625 0.625 0.625 1.638 0 2.263s-1.638 0.625-2.263 0l-6.869-6.869-6.869 6.869c-0.625 0.625-1.638 0.625-2.263 0s-0.625-1.638 0-2.263l6.869-6.869-6.869-6.869c-0.625-0.625-0.625-1.638 0-2.263z"></path>
-        </svg>
+        <.icon name="x" type="solid" class="h-4 w-4" />
       </button>
     </div>
     """
@@ -49,6 +45,10 @@ defmodule MyAppWeb.Toast do
   defp get_color("error"), do: "text-red-600 border-red-600"
   defp get_color("success"), do: "text-green-600 border-green-600"
   defp get_color(_), do: "text-blue-600 border-blue-600"
+
+  defp get_icon("error"), do: "exclamation"
+  defp get_icon("success"), do: "check-circle"
+  defp get_icon(_), do: "exclamation-circle"
 
   defp get_timeout("error"), do: 9000
   defp get_timeout(_), do: 3000

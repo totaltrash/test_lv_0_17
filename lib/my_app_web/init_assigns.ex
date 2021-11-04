@@ -19,7 +19,7 @@ defmodule MyAppWeb.InitAssigns do
 
   defp add_toast(_, socket), do: {:cont, socket}
 
-  defp clear_toast("clear_toast", %{"id" => id} = params, socket) do
+  defp clear_toast("clear_toast", %{"id" => id}, socket) do
     {:halt,
      update(socket, :toasts, fn toasts ->
        Enum.reject(toasts, fn toast -> toast.id == String.to_integer(id) end)

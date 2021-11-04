@@ -1,5 +1,6 @@
 defmodule MyAppWeb.ToastFlash do
   use Phoenix.Component
+  import Heroicons.LiveView
   alias Phoenix.LiveView.JS
 
   def toaster(assigns) do
@@ -35,13 +36,7 @@ defmodule MyAppWeb.ToastFlash do
           phx-click="lv:clear-flash"
           phx-value-key={@type}
         >
-          <svg class="fill-current"
-            width="16"
-            height="16"
-            viewBox="0 0 32 32"
-          >
-            <path d="M6.869 6.869c0.625-0.625 1.638-0.625 2.263 0l6.869 6.869 6.869-6.869c0.625-0.625 1.638-0.625 2.263 0s0.625 1.638 0 2.263l-6.869 6.869 6.869 6.869c0.625 0.625 0.625 1.638 0 2.263s-1.638 0.625-2.263 0l-6.869-6.869-6.869 6.869c-0.625 0.625-1.638 0.625-2.263 0s-0.625-1.638 0-2.263l6.869-6.869-6.869-6.869c-0.625-0.625-0.625-1.638 0-2.263z"></path>
-          </svg>
+          <.icon name="x" type="solid" class="h-4 w-4" />
         </button>
       </div>
     <% end %>
