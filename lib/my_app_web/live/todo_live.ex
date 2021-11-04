@@ -12,23 +12,26 @@ defmodule MyAppWeb.TodoLive do
   end
 
   def render(assigns) do
+    button_base_classes =
+      "flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white md:py-4 md:text-lg md:px-10"
+
     ~H"""
     <Page.wrapper current_menu="todo" title="To Do">
       <div class="flex flex-wrap items-center gap-4">
-        <%= live_patch("Show Modal", to: Routes.todo_path(MyAppWeb.Endpoint, :show_modal), class: "flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10") %>
-        <button phx-click="add_flash" phx-value-type={:error} class="flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-red-600 hover:bg-red-700 md:py-4 md:text-lg md:px-10">
+        <%= live_patch("Show Modal", to: Routes.todo_path(MyAppWeb.Endpoint, :show_modal), class: "#{button_base_classes} bg-indigo-600 hover:bg-indigo-700") %>
+        <button phx-click="add_flash" phx-value-type={:error} class={"#{button_base_classes} bg-red-600 hover:bg-red-700"}>
           Add Flash
         </button>
-        <button phx-click="add_flash" phx-value-type={:info} class="flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10">
+        <button phx-click="add_flash" phx-value-type={:info} class={"#{button_base_classes} bg-blue-600 hover:bg-blue-700"}>
           Add Flash
         </button>
-        <button phx-click="add_flash" phx-value-type={:success} class="flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-green-600 hover:bg-green-700 md:py-4 md:text-lg md:px-10">
+        <button phx-click="add_flash" phx-value-type={:success} class={"#{button_base_classes} bg-green-600 hover:bg-green-700"}>
           Add Flash
         </button>
-        <button phx-click="send_local_message" class="flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 md:py-4 md:text-lg md:px-10">
+        <button phx-click="send_local_message" class={"#{button_base_classes} bg-yellow-600 hover:bg-yellow-700"}>
           Send Local Message
         </button>
-        <button phx-click="send_global_message" class="flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-yellow-500 hover:bg-yellow-600 md:py-4 md:text-lg md:px-10">
+        <button phx-click="send_global_message" class={"#{button_base_classes} bg-yellow-500 hover:bg-yellow-600"}>
           Send Global Message
         </button>
       </div>
@@ -78,7 +81,7 @@ defmodule MyAppWeb.TodoLive do
   end
 
   def handle_event("send_global_message", _, socket) do
-    MyAppWeb.Endpoint.broadcast(@topic, "whatup from #{inspect(self())}!", %{})
+    MyAppWeb.Endpoint.broadcast(@topic, "greeting", %{sender: inspect(self()), message: "whatup"})
 
     {:noreply, socket}
   end
@@ -93,14 +96,17 @@ defmodule MyAppWeb.TodoLive do
   end
 
   def handle_info(
-        %Phoenix.Socket.Broadcast{topic: @topic, payload: payload, event: event} = info,
+        %Phoenix.Socket.Broadcast{topic: @topic, event: "greeting", payload: payload} = _info,
         socket
       ) do
-    IO.inspect(info)
+    # IO.inspect(info)
 
     socket =
       socket
-      |> put_flash(:success, "Global message received: #{event}")
+      |> put_flash(
+        :success,
+        "Global message received: #{payload.message}, from #{payload.sender}"
+      )
 
     {:noreply, socket}
   end
