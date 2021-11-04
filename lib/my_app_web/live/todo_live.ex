@@ -14,7 +14,7 @@ defmodule MyAppWeb.TodoLive do
   def render(assigns) do
     ~H"""
     <Page.wrapper current_menu="todo" title="To Do">
-      <div class="flex items-center gap-4">
+      <div class="flex flex-wrap items-center gap-4">
         <%= live_patch("Show Modal", to: Routes.todo_path(MyAppWeb.Endpoint, :show_modal), class: "flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10") %>
         <button phx-click="add_flash" phx-value-type={:error} class="flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-red-600 hover:bg-red-700 md:py-4 md:text-lg md:px-10">
           Add Flash
