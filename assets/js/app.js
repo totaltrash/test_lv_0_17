@@ -26,12 +26,14 @@ import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 
+import Toast from "./toast"
 import Flash from "./flash"
 import ScrollLock from "./scroll_lock"
 import Autofocus from "./autofocus"
 import ClearTextInput from "./clear_text_input"
 
 const hooks = {
+  Toast,
   Flash,
   ScrollLock,
   Autofocus,

@@ -1,4 +1,5 @@
 <main>
-  <MyAppWeb.Toast.toaster socket={@socket} flash={@flash}></MyAppWeb.Toast.toaster>
+  <MyAppWeb.ToastFlash.toaster socket={@socket} flash={@flash}></MyAppWeb.ToastFlash.toaster>
+  <MyAppWeb.Toast.toaster socket={@socket} toasts={@toasts}></MyAppWeb.Toast.toaster>
   <%= @inner_content %>
 </main>

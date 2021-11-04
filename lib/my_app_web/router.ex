@@ -14,17 +14,19 @@ defmodule MyAppWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", MyAppWeb do
-    pipe_through :browser
+  live_session :default, on_mount: MyAppWeb.InitAssigns do
+    scope "/", MyAppWeb do
+      pipe_through :browser
 
-    live "/", HomeLive, :index
-    live "/todo", TodoLive, :index
-    live "/todo/modal", TodoLive, :show_modal
+      live "/", HomeLive, :index
+      live "/todo", TodoLive, :index
+      live "/todo/modal", TodoLive, :show_modal
 
-    # live_session :default do
-    #   live "/", HomeLive, :index
-    #   live "/todo", TodoLive, :index
-    # end
+      # live_session :default do
+      #   live "/", HomeLive, :index
+      #   live "/todo", TodoLive, :index
+      # end
+    end
   end
 
   # Other scopes may use custom stacks.
