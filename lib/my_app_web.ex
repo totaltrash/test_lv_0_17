@@ -47,6 +47,8 @@ defmodule MyAppWeb do
       use Phoenix.LiveView,
         layout: {MyAppWeb.LayoutView, "live.html"}
 
+      import MyAppWeb.LiveHelpers
+
       unquote(view_helpers())
     end
   end

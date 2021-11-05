@@ -6,7 +6,8 @@ defmodule MyAppWeb.TodoLive do
   alias MyAppWeb.Page
   alias MyAppWeb.Modal
 
-  def mount(_, _session, socket) do
+  def mount(_, session, socket) do
+    # IO.inspect(session)
     MyAppWeb.Endpoint.subscribe(@topic)
     {:ok, socket}
   end
@@ -47,7 +48,7 @@ defmodule MyAppWeb.TodoLive do
         <button phx-click="add_toast_and_patch" phx-value-type={:success} class={"#{button_base_classes} bg-green-500 hover:bg-green-600"}>
           Add Toast and Patch
         </button>
-        <button disabled="disabled" phx-click="add_toast_and_redirect" phx-value-type={:success} class={"#{button_base_classes} bg-gray-300 text-gray-200 cursor-not-allowed"}>
+        <button phx-click="add_toast_and_redirect" phx-value-type={:success} class={"#{button_base_classes} bg-green-400 hover:bg-green-500"}>
           Add Toast and Redirect
         </button>
       </div>
@@ -101,7 +102,7 @@ defmodule MyAppWeb.TodoLive do
   def handle_event("add_toast_and_redirect", %{"type" => type}, socket) do
     socket =
       socket
-      |> add_toast(type, "Hello toast and redirect")
+      |> add_toast(:error, "Hello toast and redirect")
       |> push_redirect(to: Routes.todo_path(socket, :index))
 
     {:noreply, socket}
@@ -160,11 +161,5 @@ defmodule MyAppWeb.TodoLive do
       )
 
     {:noreply, socket}
-  end
-
-  defp add_toast(socket, type, message) do
-    send(self(), {:add_toast, %{type: type, message: message}})
-
-    socket
   end
 end

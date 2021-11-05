@@ -42,14 +42,14 @@ defmodule MyAppWeb.Toast do
     """
   end
 
-  defp get_color("error"), do: "text-red-600 border-red-600"
-  defp get_color("success"), do: "text-green-600 border-green-600"
+  defp get_color(:error), do: "text-red-600 border-red-600"
+  defp get_color(:success), do: "text-green-600 border-green-600"
   defp get_color(_), do: "text-blue-600 border-blue-600"
 
-  defp get_icon("error"), do: "exclamation"
-  defp get_icon("success"), do: "check-circle"
+  defp get_icon(:error), do: "exclamation"
+  defp get_icon(:success), do: "check-circle"
   defp get_icon(_), do: "exclamation-circle"
 
-  defp get_timeout("error"), do: 9000
+  defp get_timeout(:error), do: 6000
   defp get_timeout(_), do: 3000
 end
