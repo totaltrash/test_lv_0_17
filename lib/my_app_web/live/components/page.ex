@@ -7,7 +7,7 @@ defmodule MyAppWeb.Page do
   defp menu_items do
     [
       %{id: "home", label: "Home", path: Routes.home_path(MyAppWeb.Endpoint, :index)},
-      %{id: "todo", label: "To Do", path: Routes.todo_path(MyAppWeb.Endpoint, :index)}
+      %{id: "poc", label: "POC", path: Routes.poc_path(MyAppWeb.Endpoint, :index)}
     ]
   end
 

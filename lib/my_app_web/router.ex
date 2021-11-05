@@ -20,8 +20,8 @@ defmodule MyAppWeb.Router do
       pipe_through :browser
 
       live "/", HomeLive, :index
-      live "/todo", TodoLive, :index
-      live "/todo/modal", TodoLive, :show_modal
+      live "/poc", PocLive, :index
+      live "/poc/modal", PocLive, :show_modal
     end
   end
 

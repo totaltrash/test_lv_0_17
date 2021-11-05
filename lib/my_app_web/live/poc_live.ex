@@ -1,4 +1,4 @@
-defmodule MyAppWeb.TodoLive do
+defmodule MyAppWeb.PocLive do
   use MyAppWeb, :live_view
 
   @topic "messages"
@@ -17,10 +17,10 @@ defmodule MyAppWeb.TodoLive do
       "flex items-center justify-center px-4 py-2 border border-transparent text-base font-medium rounded text-white md:py-3 md:text-lg md:px-6"
 
     ~H"""
-    <Page.wrapper current_menu="todo" title="To Do">
+    <Page.wrapper current_menu="poc" title="POC">
       <h1 class="text-2xl font-medium mb-2">Modals</h1>
       <div class="flex flex-wrap items-center gap-4">
-        <%= live_patch("Show Modal", to: Routes.todo_path(MyAppWeb.Endpoint, :show_modal), class: "#{button_base_classes} bg-indigo-600 hover:bg-indigo-700") %>
+        <%= live_patch("Show Modal", to: Routes.poc_path(MyAppWeb.Endpoint, :show_modal), class: "#{button_base_classes} bg-indigo-600 hover:bg-indigo-700") %>
       </div>
       <h1 class="text-2xl font-medium mt-8 mb-2">Flashes</h1>
       <div class="flex flex-wrap items-center gap-4">
@@ -94,7 +94,7 @@ defmodule MyAppWeb.TodoLive do
     socket =
       socket
       |> add_toast(type, "Hello toast and patch")
-      |> push_patch(to: Routes.todo_path(socket, :index))
+      |> push_patch(to: Routes.poc_path(socket, :index))
 
     {:noreply, socket}
   end
@@ -103,7 +103,7 @@ defmodule MyAppWeb.TodoLive do
     socket =
       socket
       |> add_toast(:error, "Hello toast and redirect")
-      |> push_redirect(to: Routes.todo_path(socket, :index))
+      |> push_redirect(to: Routes.poc_path(socket, :index))
 
     {:noreply, socket}
   end
@@ -111,8 +111,8 @@ defmodule MyAppWeb.TodoLive do
   def handle_event("modal_confirm", _, socket) do
     socket =
       socket
-      |> put_flash(:success, "Wow, you confirmed, stand by...")
-      |> push_patch(to: Routes.todo_path(socket, :index))
+      |> add_toast(:success, "Wow, you confirmed, stand by...")
+      |> push_patch(to: Routes.poc_path(socket, :index))
 
     {:noreply, socket}
   end
@@ -120,8 +120,8 @@ defmodule MyAppWeb.TodoLive do
   def handle_event("modal_cancel", _, socket) do
     socket =
       socket
-      |> put_flash(:info, "Cancelled, that's a good call")
-      |> push_patch(to: Routes.todo_path(socket, :index))
+      |> add_toast(:info, "Cancelled, that's a good call")
+      |> push_patch(to: Routes.poc_path(socket, :index))
 
     {:noreply, socket}
   end
@@ -141,8 +141,8 @@ defmodule MyAppWeb.TodoLive do
   def handle_info(:local_message, socket) do
     socket =
       socket
-      |> put_flash(:success, "Local message received")
-      |> push_patch(to: Routes.todo_path(socket, :index))
+      |> add_toast(:success, "Local message received")
+      |> push_patch(to: Routes.poc_path(socket, :index))
 
     {:noreply, socket}
   end
@@ -155,7 +155,7 @@ defmodule MyAppWeb.TodoLive do
 
     socket =
       socket
-      |> put_flash(
+      |> add_toast(
         :success,
         "Global message received: #{payload.message}, from #{payload.sender}"
       )
