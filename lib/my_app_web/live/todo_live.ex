@@ -3,7 +3,6 @@ defmodule MyAppWeb.TodoLive do
 
   @topic "messages"
 
-  # on_mount MyAppWeb.InitAssigns
   alias MyAppWeb.Page
   alias MyAppWeb.Modal
 
@@ -18,8 +17,12 @@ defmodule MyAppWeb.TodoLive do
 
     ~H"""
     <Page.wrapper current_menu="todo" title="To Do">
+      <h1 class="text-2xl font-medium mb-2">Modals</h1>
       <div class="flex flex-wrap items-center gap-4">
         <%= live_patch("Show Modal", to: Routes.todo_path(MyAppWeb.Endpoint, :show_modal), class: "#{button_base_classes} bg-indigo-600 hover:bg-indigo-700") %>
+      </div>
+      <h1 class="text-2xl font-medium mt-8 mb-2">Flashes</h1>
+      <div class="flex flex-wrap items-center gap-4">
         <button phx-click="add_flash" phx-value-type={:error} class={"#{button_base_classes} bg-red-600 hover:bg-red-700"}>
           Add Flash
         </button>
@@ -29,7 +32,9 @@ defmodule MyAppWeb.TodoLive do
         <button phx-click="add_flash" phx-value-type={:success} class={"#{button_base_classes} bg-green-600 hover:bg-green-700"}>
           Add Flash
         </button>
-
+      </div>
+      <h1 class="text-2xl font-medium mt-8 mb-2">Toasts</h1>
+      <div class="flex flex-wrap items-center gap-4">
         <button phx-click="add_toast" phx-value-type={:error} class={"#{button_base_classes} bg-red-600 hover:bg-red-700"}>
           Add Toast
         </button>
@@ -39,7 +44,15 @@ defmodule MyAppWeb.TodoLive do
         <button phx-click="add_toast" phx-value-type={:success} class={"#{button_base_classes} bg-green-600 hover:bg-green-700"}>
           Add Toast
         </button>
-
+        <button phx-click="add_toast_and_patch" phx-value-type={:success} class={"#{button_base_classes} bg-green-500 hover:bg-green-600"}>
+          Add Toast and Patch
+        </button>
+        <button disabled="disabled" phx-click="add_toast_and_redirect" phx-value-type={:success} class={"#{button_base_classes} bg-gray-300 text-gray-200 cursor-not-allowed"}>
+          Add Toast and Redirect
+        </button>
+      </div>
+      <h1 class="text-2xl font-medium mt-8 mb-2">Messages</h1>
+      <div class="flex flex-wrap items-center gap-4">
         <button phx-click="send_local_message" class={"#{button_base_classes} bg-yellow-600 hover:bg-yellow-700"}>
           Send Local Message
         </button>
@@ -69,12 +82,27 @@ defmodule MyAppWeb.TodoLive do
   end
 
   def handle_event("add_toast", %{"type" => type}, socket) do
-    # IO.inspect("HERE 1")
-    # send(self(), {:add_toast, %{type: type, message: "BLAH"}})
-
     socket =
       socket
       |> add_toast(type, "Hello #{to_string(type)} toast")
+
+    {:noreply, socket}
+  end
+
+  def handle_event("add_toast_and_patch", %{"type" => type}, socket) do
+    socket =
+      socket
+      |> add_toast(type, "Hello toast and patch")
+      |> push_patch(to: Routes.todo_path(socket, :index))
+
+    {:noreply, socket}
+  end
+
+  def handle_event("add_toast_and_redirect", %{"type" => type}, socket) do
+    socket =
+      socket
+      |> add_toast(type, "Hello toast and redirect")
+      |> push_redirect(to: Routes.todo_path(socket, :index))
 
     {:noreply, socket}
   end
