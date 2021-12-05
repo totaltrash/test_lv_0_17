@@ -22,6 +22,7 @@ defmodule MyAppWeb.Router do
       live "/", HomeLive, :index
       live "/poc", PocLive, :index
       live "/poc/modal", PocLive, :show_modal
+      live "/assign_new", TemporaryAssignsLive, :index
     end
   end
 
