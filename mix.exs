@@ -50,7 +50,8 @@ defmodule MyApp.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       {:ex_heroicons, "~> 0.5.0"},
-      {:ash, "~> 1.46"}
+      {:ash, "~> 1.50"},
+      {:ash_phoenix, "~> 0.5.18"}
     ]
   end
 
