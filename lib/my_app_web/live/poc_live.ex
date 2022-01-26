@@ -5,6 +5,7 @@ defmodule MyAppWeb.PocLive do
 
   alias MyAppWeb.Page
   alias MyAppWeb.Modal
+  alias MyAppWeb.Button
 
   def mount(_, session, socket) do
     # IO.inspect(session)
@@ -21,6 +22,12 @@ defmodule MyAppWeb.PocLive do
       <h1 class="text-2xl font-medium mb-2">Modals</h1>
       <div class="flex flex-wrap items-center gap-4">
         <%= live_patch("Show Modal", to: Routes.poc_path(MyAppWeb.Endpoint, :show_modal), class: "#{button_base_classes} bg-indigo-600 hover:bg-indigo-700") %>
+
+        <Button.button
+          variant={:danger}
+          href={Routes.poc_path(MyAppWeb.Endpoint, :show_modal)}
+          data-phx-link="patch"
+          data-phx-link-state="push">Show Modal (Button Component)</Button.button>
       </div>
       <h1 class="text-2xl font-medium mt-8 mb-2">Flashes</h1>
       <div class="flex flex-wrap items-center gap-4">
