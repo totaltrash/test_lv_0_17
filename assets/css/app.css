@@ -2,6 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  label {
+    @apply block text-sm font-medium text-gray-700;
+  }
+  .invalid-feedback {
+    @apply block text-sm font-medium text-red-700;
+  }
+
+  /* tailwind forms overrides */
+  [type='text'],
+  [type='email'],
+  [type='url'],
+  [type='password'],
+  [type='number'],
+  [type='date'],
+  [type='datetime-local'],
+  [type='month'],
+  [type='search'],
+  [type='tel'],
+  [type='time'],
+  [type='week'],
+  [multiple],
+  textarea,
+  select
+  {
+    @apply block w-full my-1 border-gray-300 sm:text-sm p-2 rounded focus:ring-1 focus:ring-sky-600 focus:outline-none focus:border-sky-600;
+  }
+
+  [type='checkbox'],
+  [type='radio'] {
+    @apply border-gray-300 text-sky-600 focus:ring-sky-500 rounded;
+  }
+}
+
 .fade-in-scale {
   animation: 100ms ease-out 0s normal forwards 1 fade-in-scale-keys;
 }

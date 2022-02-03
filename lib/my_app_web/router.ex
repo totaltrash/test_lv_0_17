@@ -21,8 +21,13 @@ defmodule MyAppWeb.Router do
 
       live "/", HomeLive, :index
       live "/poc", PocLive, :index
-      live "/poc/modal", PocLive, :show_modal
-      live "/assign_new", TemporaryAssignsLive, :index
+      live "/poc/alert_modal", PocLive, :show_alert_modal
+      live "/poc/confirm_modal", PocLive, :show_confirm_modal
+      live "/poc/custom_modal", PocLive, :show_custom_modal
+      live "/temporaryassigns", TemporaryAssignsLive, :index
+      live "/timestamps", TimestampsLive, :index
+      live "/timestamps/show/:id", TimestampsLive, :show
+      live "/timestamps/edit/:id", TimestampsLive, :edit
     end
   end
 

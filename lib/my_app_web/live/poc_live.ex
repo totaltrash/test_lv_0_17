@@ -3,12 +3,11 @@ defmodule MyAppWeb.PocLive do
 
   @topic "messages"
 
-  alias MyAppWeb.Page
-  alias MyAppWeb.Modal
-  alias MyAppWeb.Button
+  import MyAppWeb.Page
+  import MyAppWeb.Modal
+  import MyAppWeb.Button
 
-  def mount(_, session, socket) do
-    # IO.inspect(session)
+  def mount(_, _session, socket) do
     MyAppWeb.Endpoint.subscribe(@topic)
     {:ok, socket}
   end
@@ -18,16 +17,18 @@ defmodule MyAppWeb.PocLive do
       "flex items-center justify-center px-4 py-2 border border-transparent text-base font-medium rounded text-white md:py-3 md:text-lg md:px-6"
 
     ~H"""
-    <Page.wrapper current_menu="poc" title="POC">
+    <.wrapper current_menu="poc" title="POC">
       <h1 class="text-2xl font-medium mb-2">Modals</h1>
       <div class="flex flex-wrap items-center gap-4">
-        <%= live_patch("Show Modal", to: Routes.poc_path(MyAppWeb.Endpoint, :show_modal), class: "#{button_base_classes} bg-indigo-600 hover:bg-indigo-700") %>
+      <%= live_patch("Alert Modal", to: Routes.poc_path(MyAppWeb.Endpoint, :show_alert_modal), class: "#{button_base_classes} bg-indigo-600 hover:bg-indigo-700") %>
+      <%= live_patch("Confirm Modal", to: Routes.poc_path(MyAppWeb.Endpoint, :show_confirm_modal), class: "#{button_base_classes} bg-indigo-600 hover:bg-indigo-700") %>
+      <%= live_patch("Custom Modal", to: Routes.poc_path(MyAppWeb.Endpoint, :show_custom_modal), class: "#{button_base_classes} bg-indigo-600 hover:bg-indigo-700") %>
 
-        <Button.button
+        <.button
           variant={:danger}
-          href={Routes.poc_path(MyAppWeb.Endpoint, :show_modal)}
+          href={Routes.poc_path(MyAppWeb.Endpoint, :show_confirm_modal)}
           data-phx-link="patch"
-          data-phx-link-state="push">Show Modal (Button Component)</Button.button>
+          data-phx-link-state="push">Show Modal (Button Component)</.button>
       </div>
       <h1 class="text-2xl font-medium mt-8 mb-2">Flashes</h1>
       <div class="flex flex-wrap items-center gap-4">
@@ -68,16 +69,50 @@ defmodule MyAppWeb.PocLive do
           Send Global Message
         </button>
       </div>
-      <%= if @live_action == :show_modal do %>
-        <Modal.confirm_modal heading="This could be dangerous" confirm="modal_confirm" cancel="modal_cancel">
-          Hey, are you sure?
-        </Modal.confirm_modal>
+      <%= if connected?(@socket) do %>
+        <%= if @live_action == :show_alert_modal do %>
+          <.alert_modal heading="Something happened" ok="alert_modal_ok">
+            Yep, that happened
+          </.alert_modal>
+        <% end %>
+        <%= if @live_action == :show_confirm_modal do %>
+          <.confirm_modal heading="This could be dangerous" ok="confirm_modal_ok" cancel="confirm_modal_cancel">
+            Hey, are you sure?
+          </.confirm_modal>
+        <% end %>
+        <%= if @live_action == :show_custom_modal do %>
+          <.modal heading="Custom Modal" close="modal_close" icon="exclamation" icon_color="bg-red-100 text-red-700">
+            Hey, are you sure?
+            <:buttons>
+              <.modal_button label="Submit" variant="danger" click="modal_submit" />
+              <.modal_button label="Cancel" click="modal_close" />
+            </:buttons>
+          </.modal>
+        <% end %>
       <% end %>
-    </Page.wrapper>
+    </.wrapper>
     """
   end
 
   def handle_params(_params, _uri, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_event("modal_submit", _, socket) do
+    socket =
+      socket
+      |> add_toast(:success, "Submitted modal")
+      |> push_patch(to: Routes.poc_path(socket, :index))
+
+    {:noreply, socket}
+  end
+
+  def handle_event("modal_close", _, socket) do
+    socket =
+      socket
+      |> add_toast(:info, "Closed modal")
+      |> push_patch(to: Routes.poc_path(socket, :index))
+
     {:noreply, socket}
   end
 
@@ -106,7 +141,7 @@ defmodule MyAppWeb.PocLive do
     {:noreply, socket}
   end
 
-  def handle_event("add_toast_and_redirect", %{"type" => type}, socket) do
+  def handle_event("add_toast_and_redirect", %{"type" => _type}, socket) do
     socket =
       socket
       |> add_toast(:error, "Hello toast and redirect")
@@ -115,7 +150,15 @@ defmodule MyAppWeb.PocLive do
     {:noreply, socket}
   end
 
-  def handle_event("modal_confirm", _, socket) do
+  def handle_event("alert_modal_ok", _, socket) do
+    socket =
+      socket
+      |> push_patch(to: Routes.poc_path(socket, :index))
+
+    {:noreply, socket}
+  end
+
+  def handle_event("confirm_modal_ok", _, socket) do
     socket =
       socket
       |> add_toast(:success, "Wow, you confirmed, stand by...")
@@ -124,7 +167,7 @@ defmodule MyAppWeb.PocLive do
     {:noreply, socket}
   end
 
-  def handle_event("modal_cancel", _, socket) do
+  def handle_event("confirm_modal_cancel", _, socket) do
     socket =
       socket
       |> add_toast(:info, "Cancelled, that's a good call")

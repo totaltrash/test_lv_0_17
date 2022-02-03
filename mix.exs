@@ -51,7 +51,8 @@ defmodule MyApp.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:ex_heroicons, "~> 0.5.0"},
       {:ash, "~> 1.50"},
-      {:ash_phoenix, "~> 0.5.18"}
+      {:ash_phoenix, "~> 0.5.18"},
+      {:ash_postgres, "~> 0.41.7"}
     ]
   end
 

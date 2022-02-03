@@ -12,6 +12,11 @@ defmodule MyAppWeb.Page do
         id: "temporary_assigns",
         label: "Temp Ass",
         path: Routes.temporary_assigns_path(MyAppWeb.Endpoint, :index)
+      },
+      %{
+        id: "timestamps",
+        label: "Timestamps",
+        path: Routes.timestamps_path(MyAppWeb.Endpoint, :index)
       }
     ]
   end
@@ -38,8 +43,8 @@ defmodule MyAppWeb.Page do
       to: "#profile-menu",
       transition: {
         "transition ease-in duration-75",
-        "transform opacity-100 scale-100",
-        "transform opacity-0 scale-95"
+        "opacity-100 scale-100",
+        "opacity-0 scale-95"
       }
     )
   end
@@ -50,13 +55,13 @@ defmodule MyAppWeb.Page do
       to: "#profile-menu",
       in: {
         "transition ease-out duration-100",
-        "transform opacity-0 scale-95",
-        "transform opacity-100 scale-100"
+        "opacity-0 scale-95",
+        "opacity-100 scale-100"
       },
       out: {
         "transition ease-in duration-75",
-        "transform opacity-100 scale-100",
-        "transform opacity-0 scale-95"
+        "opacity-100 scale-100",
+        "opacity-0 scale-95"
       }
     )
   end
@@ -116,11 +121,11 @@ defmodule MyAppWeb.Page do
                     Dropdown menu, show/hide based on menu state.
 
                     Entering: "transition ease-out duration-100"
-                      From: "transform opacity-0 scale-95"
-                      To: "transform opacity-100 scale-100"
+                      From: "opacity-0 scale-95"
+                      To: "opacity-100 scale-100"
                     Leaving: "transition ease-in duration-75"
-                      From: "transform opacity-100 scale-100"
-                      To: "transform opacity-0 scale-95"
+                      From: "opacity-100 scale-100"
+                      To: "opacity-0 scale-95"
                   -->
                   <div
                     phx-remove={hide_profile_menu()}
@@ -150,8 +155,8 @@ defmodule MyAppWeb.Page do
                 phx-click={
                   JS.toggle(
                     to: "#mobile-menu",
-                    in: {"transition ease-out duration-100", "transform scale-y-0", "transform scale-y-100"},
-                    out: {"transition ease-in duration-75", "transform scale-y-100", "transform scale-y-0"}
+                    in: {"transition ease-out duration-100", "scale-y-0", "scale-y-100"},
+                    out: {"transition ease-in duration-75", "scale-y-100", "scale-y-0"}
                   )
                   |> JS.toggle(to: ".mobile-menu-button-open")
                   |> JS.toggle(to: ".mobile-menu-button-close")
@@ -171,7 +176,7 @@ defmodule MyAppWeb.Page do
 
         <!-- Mobile menu, show/hide based on menu state. -->
         <div class="md:hidden" id="mobile-menu-container">
-          <div class="hidden z-50 bg-gray-800 origin-top absolute w-full" id="mobile-menu" phx-remove={JS.hide(transition: {"transition ease-in duration-75", "transform scale-y-100", "transform scale-y-0"})}>
+          <div class="hidden z-50 bg-gray-800 origin-top absolute w-full" id="mobile-menu" phx-remove={JS.hide(transition: {"transition ease-in duration-75", "scale-y-100", "scale-y-0"})}>
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               <%= for menu_item <- menu_items() do %>
                 <%= live_redirect(menu_item.label, to: menu_item.path, class: get_mobile_item_class(menu_item, @current_menu)) %>
