@@ -6,6 +6,7 @@ defmodule MyAppWeb.PocLive do
   import MyAppWeb.Page
   import MyAppWeb.Modal
   import MyAppWeb.Button
+  import MyAppWeb.Form
 
   def mount(_, _session, socket) do
     MyAppWeb.Endpoint.subscribe(@topic)
@@ -23,6 +24,7 @@ defmodule MyAppWeb.PocLive do
       <%= live_patch("Alert Modal", to: Routes.poc_path(MyAppWeb.Endpoint, :show_alert_modal), class: "#{button_base_classes} bg-indigo-600 hover:bg-indigo-700") %>
       <%= live_patch("Confirm Modal", to: Routes.poc_path(MyAppWeb.Endpoint, :show_confirm_modal), class: "#{button_base_classes} bg-indigo-600 hover:bg-indigo-700") %>
       <%= live_patch("Custom Modal", to: Routes.poc_path(MyAppWeb.Endpoint, :show_custom_modal), class: "#{button_base_classes} bg-indigo-600 hover:bg-indigo-700") %>
+      <%= live_patch("Form Modal", to: Routes.poc_path(MyAppWeb.Endpoint, :show_form_modal), class: "#{button_base_classes} bg-indigo-600 hover:bg-indigo-700") %>
 
         <.button
           variant={:danger}
@@ -71,14 +73,23 @@ defmodule MyAppWeb.PocLive do
       </div>
       <%= if connected?(@socket) do %>
         <%= if @live_action == :show_alert_modal do %>
-          <.alert_modal heading="Something happened" ok="alert_modal_ok">
+          <.alert_modal heading="Alert Modal" ok="alert_modal_ok">
             Yep, that happened
           </.alert_modal>
         <% end %>
         <%= if @live_action == :show_confirm_modal do %>
-          <.confirm_modal heading="This could be dangerous" ok="confirm_modal_ok" cancel="confirm_modal_cancel">
+          <.confirm_modal heading="Confirm Modal" ok="confirm_modal_ok" cancel="confirm_modal_cancel">
             Hey, are you sure?
           </.confirm_modal>
+        <% end %>
+        <%= if @live_action == :show_form_modal do %>
+          <.form_modal heading="Form Modal" let={f} form={@form} form_submit="form_modal_submit" cancel="form_modal_cancel">
+            <.field_row>
+              <%= label f, :title %>
+              <%= text_input f, :title, autocomplete: "off" %>
+              <%= error_tag f, :title  %>
+            </.field_row>
+          </.form_modal>
         <% end %>
         <%= if @live_action == :show_custom_modal do %>
           <.modal heading="Custom Modal" close="modal_close" icon="exclamation" icon_color="bg-red-100 text-red-700">
@@ -94,8 +105,16 @@ defmodule MyAppWeb.PocLive do
     """
   end
 
-  def handle_params(_params, _uri, socket) do
-    {:noreply, socket}
+  def handle_params(params, _url, socket) do
+    {:noreply, apply_action(socket, params, socket.assigns.live_action)}
+  end
+
+  defp apply_action(socket, _params, :show_form_modal) do
+    assign(socket, form: :form)
+  end
+
+  defp apply_action(socket, _, _) do
+    socket
   end
 
   def handle_event("modal_submit", _, socket) do
@@ -171,6 +190,26 @@ defmodule MyAppWeb.PocLive do
     socket =
       socket
       |> add_toast(:info, "Cancelled, that's a good call")
+      |> push_patch(to: Routes.poc_path(socket, :index))
+
+    {:noreply, socket}
+  end
+
+  def handle_event("form_modal_cancel", _, socket) do
+    socket =
+      socket
+      |> add_toast(:info, "Cancelled form modal")
+      |> push_patch(to: Routes.poc_path(socket, :index))
+
+    {:noreply, socket}
+  end
+
+  def handle_event("form_modal_submit", %{"form" => form}, socket) do
+    IO.inspect(form)
+
+    socket =
+      socket
+      |> add_toast(:info, "Submitted form modal")
       |> push_patch(to: Routes.poc_path(socket, :index))
 
     {:noreply, socket}
