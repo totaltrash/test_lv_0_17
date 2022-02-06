@@ -23,8 +23,8 @@ defmodule MyAppWeb.PocLive do
       <div class="flex flex-wrap items-center gap-4">
       <%= live_patch("Alert Modal", to: Routes.poc_path(MyAppWeb.Endpoint, :show_alert_modal), class: "#{button_base_classes} bg-indigo-600 hover:bg-indigo-700") %>
       <%= live_patch("Confirm Modal", to: Routes.poc_path(MyAppWeb.Endpoint, :show_confirm_modal), class: "#{button_base_classes} bg-indigo-600 hover:bg-indigo-700") %>
-      <%= live_patch("Custom Modal", to: Routes.poc_path(MyAppWeb.Endpoint, :show_custom_modal), class: "#{button_base_classes} bg-indigo-600 hover:bg-indigo-700") %>
       <%= live_patch("Form Modal", to: Routes.poc_path(MyAppWeb.Endpoint, :show_form_modal), class: "#{button_base_classes} bg-indigo-600 hover:bg-indigo-700") %>
+      <%= live_patch("Custom Modal", to: Routes.poc_path(MyAppWeb.Endpoint, :show_custom_modal), class: "#{button_base_classes} bg-indigo-600 hover:bg-indigo-700") %>
 
         <.button
           variant={:danger}
