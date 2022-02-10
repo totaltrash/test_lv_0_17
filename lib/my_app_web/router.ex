@@ -29,6 +29,7 @@ defmodule MyAppWeb.Router do
       live "/timestamps", TimestampsLive, :index
       live "/timestamps/show/:id", TimestampsLive, :show
       live "/timestamps/edit/:id", TimestampsLive, :edit
+      live "/uploads", UploadsLive, :index
     end
   end
 

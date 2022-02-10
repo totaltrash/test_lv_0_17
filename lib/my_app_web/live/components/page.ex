@@ -17,6 +17,11 @@ defmodule MyAppWeb.Page do
         id: "timestamps",
         label: "Timestamps",
         path: Routes.timestamps_path(MyAppWeb.Endpoint, :index)
+      },
+      %{
+        id: "uploads",
+        label: "Uploads",
+        path: Routes.uploads_path(MyAppWeb.Endpoint, :index)
       }
     ]
   end

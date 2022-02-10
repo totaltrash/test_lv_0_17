@@ -2,6 +2,7 @@ defmodule MyAppWeb.Modal do
   use Phoenix.Component
   import Heroicons.LiveView
   alias Phoenix.LiveView.JS
+  alias MyAppWeb.Button
 
   @doc """
   Creates an opinionated alert modal. Icons, colours, and buttons are set
@@ -41,7 +42,7 @@ defmodule MyAppWeb.Modal do
       <%= render_slot(@inner_block) %>
       <:buttons>
         <.modal_button label="OK" variant="primary" click={@ok} />
-        <.modal_button label="Cancel" variant="default" click={@cancel} />
+        <.modal_button label="Cancel" variant="modal_default" click={@cancel} />
       </:buttons>
     </.modal>
     """
@@ -65,7 +66,7 @@ defmodule MyAppWeb.Modal do
       <%= render_slot(@inner_block, f) %>
       <:buttons>
         <.modal_button label="Submit" variant="primary" type="submit" />
-        <.modal_button label="Cancel" variant="default" click={@cancel} />
+        <.modal_button label="Cancel" variant="modal_default" click={@cancel} />
       </:buttons>
     </.modal>
     """
@@ -148,13 +149,13 @@ defmodule MyAppWeb.Modal do
   @doc """
   Creates a modal button.
 
-  Handling of events to be implemented in the LiveView/parent live component
+  Handling of events to be implemented in the LiveView/parent live component, including if only needs to be a link
 
       assigns:
         :label    required: true
-        :type     required: false, default: "button"
+        :type     required: false, default: "button", options: ["button", "submit"]
         :click    required: false, default: false (should be provided if type == "button", not if type == "submit")
-        :variant  required: false, default: "default"
+        :variant  required: false, default: "modal_default"
 
   """
   def modal_button(assigns) do
@@ -162,13 +163,13 @@ defmodule MyAppWeb.Modal do
       assigns
       |> assign_new(:type, fn -> "button" end)
       |> assign_new(:click, fn -> false end)
-      |> assign_new(:variant, fn -> "default" end)
+      |> assign_new(:variant, fn -> "modal_default" end)
 
     ~H"""
     <button
       type={@type}
       phx-click={@click}
-      class={"#{modal_button_variant(@variant)} w-full inline-flex justify-center rounded-md border shadow-sm px-4 py-2 text-base font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 sm:w-auto sm:text-sm"}
+      class={"#{button_base_class()} #{Button.variant(@variant)}"}
     >
       <%= @label %>
     </button>
@@ -181,17 +182,9 @@ defmodule MyAppWeb.Modal do
     |> JS.hide(to: "#modal", transition: "fade-out-scale")
   end
 
-  defp modal_button_variant("primary") do
-    "border-transparent bg-sky-600 text-white hover:bg-sky-700 focus:ring-sky-500"
-  end
-
-  defp modal_button_variant("danger") do
-    "border-transparent bg-red-600 text-white hover:bg-red-700 focus:ring-red-500"
-  end
-
-  defp modal_button_variant(_) do
-    "border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:ring-indigo-500"
-  end
+  defp button_base_class(),
+    do:
+      "w-full inline-flex justify-center rounded-md border shadow-sm px-4 py-2 text-base font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 sm:w-auto sm:text-sm"
 
   defp form_wrapper(%{form: nil} = assigns) do
     ~H"""

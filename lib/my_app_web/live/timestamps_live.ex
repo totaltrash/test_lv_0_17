@@ -6,8 +6,6 @@ defmodule MyAppWeb.TimestampsLive do
   import MyAppWeb.Form
 
   def mount(_params, _session, socket) do
-    IO.puts("MOUNTING")
-
     socket =
       socket
       |> assign_events()
