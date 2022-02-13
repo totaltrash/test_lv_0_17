@@ -20,11 +20,11 @@ defmodule MyAppWeb.Router do
       pipe_through :browser
 
       live "/", HomeLive, :index
-      live "/poc", PocLive, :index
-      live "/poc/alert_modal", PocLive, :show_alert_modal
-      live "/poc/confirm_modal", PocLive, :show_confirm_modal
-      live "/poc/form_modal", PocLive, :show_form_modal
-      live "/poc/custom_modal", PocLive, :show_custom_modal
+      live "/components", ComponentsLive, :index
+      live "/components/alert_modal", ComponentsLive, :show_alert_modal
+      live "/components/confirm_modal", ComponentsLive, :show_confirm_modal
+      live "/components/form_modal", ComponentsLive, :show_form_modal
+      live "/components/custom_modal", ComponentsLive, :show_custom_modal
       live "/temporaryassigns", TemporaryAssignsLive, :index
       live "/timestamps", TimestampsLive, :index
       live "/timestamps/show/:id", TimestampsLive, :show

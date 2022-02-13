@@ -1,4 +1,4 @@
-defmodule MyAppWeb.PocLive do
+defmodule MyAppWeb.ComponentsLive do
   use MyAppWeb, :live_view
 
   @topic "messages"
@@ -7,80 +7,123 @@ defmodule MyAppWeb.PocLive do
   import MyAppWeb.Modal
   import MyAppWeb.Button
   import MyAppWeb.Form
+  import MyAppWeb.Table
 
   def mount(_, _session, socket) do
     MyAppWeb.Endpoint.subscribe(@topic)
+    socket = assign(socket, data_table_items: [%{id: 1, name: "Some Name"}])
     {:ok, socket}
   end
 
   def render(assigns) do
     ~H"""
-    <.wrapper current_menu="poc" title="POC">
-      <h1 class="text-2xl font-medium mb-2">Modals</h1>
-      <div class="flex flex-wrap items-center gap-4">
-        <.button type="link" variant="primary" href={Routes.poc_path(MyAppWeb.Endpoint, :show_alert_modal)} label="Alert Modal" />
-        <.button type="link" variant="primary" href={Routes.poc_path(MyAppWeb.Endpoint, :show_confirm_modal)} label="Confirm Modal" />
-        <.button type="link" variant="primary" href={Routes.poc_path(MyAppWeb.Endpoint, :show_form_modal)} label="Form Modal" />
-        <.button type="link" variant="primary" href={Routes.poc_path(MyAppWeb.Endpoint, :show_custom_modal)} label="Custom Modal" />
-      </div>
-      <h1 class="text-2xl font-medium mt-8 mb-2">Flashes</h1>
-      <div class="flex flex-wrap items-center gap-4">
+    <.wrapper current_menu="components" title="Components">
+      <.h1>Modals</.h1>
+      <.button_container>
+        <.button type="link" variant="primary" href={Routes.components_path(MyAppWeb.Endpoint, :show_alert_modal)} label="Alert Modal" />
+        <.button type="link" variant="primary" href={Routes.components_path(MyAppWeb.Endpoint, :show_confirm_modal)} label="Confirm Modal" />
+        <.button type="link" variant="primary" href={Routes.components_path(MyAppWeb.Endpoint, :show_form_modal)} label="Form Modal" />
+        <.button type="link" variant="primary" href={Routes.components_path(MyAppWeb.Endpoint, :show_custom_modal)} label="Custom Modal" />
+      </.button_container>
+      <.h1>Flashes</.h1>
+      <.button_container>
         <.button click="add_flash" label="Add Flash" phx-value-type={:error} variant="danger" />
         <.button click="add_flash" label="Add Flash" phx-value-type={:info} variant="primary" />
         <.button click="add_flash" label="Add Flash" phx-value-type={:success} variant={{:custom, "bg-green-600 hover:bg-green-700 text-white border-transparent focus:ring-green-700"}} />
-      </div>
-      <h1 class="text-2xl font-medium mt-8 mb-2">Toasts</h1>
-      <div class="flex flex-wrap items-center gap-4">
+      </.button_container>
+      <.h1>Toasts</.h1>
+      <.button_container>
         <.button click="add_toast" label="Add Toast" phx-value-type={:error} variant="danger" />
         <.button click="add_toast" label="Add Toast" phx-value-type={:info} variant="primary" />
         <.button click="add_toast" label="Add Toast" phx-value-type={:success} variant={{:custom, "bg-green-600 hover:bg-green-700 text-white border-transparent focus:ring-green-700"}} />
         <.button click="add_toast_and_patch" label="Add Toast and Patch" phx-value-type={:success} variant="primary" />
         <.button click="add_toast_and_redirect" label="Add Toast and redirect" phx-value-type={:success} variant="primary" />
-      </div>
-      <h1 class="text-2xl font-medium mt-8 mb-2">Messages</h1>
-      <div class="flex flex-wrap items-center gap-4">
+      </.button_container>
+      <.h1>Messages</.h1>
+      <.button_container>
         <.button click="send_local_message" label="Send Local Message" variant="primary" />
         <.button click="send_global_message" label="Send Global Message" variant="primary" />
-      </div>
-      <h1 class="text-2xl font-medium mt-8 mb-2">Buttons</h1>
-      <h2 class="text-lg font-medium text-gray-500 mt-2 mb-2">Links</h2>
-      <div class="flex flex-wrap items-center gap-4">
+      </.button_container>
+      <.h1>Buttons</.h1>
+      <.h2>Links</.h2>
+      <.button_container>
         <.button
           type="link"
-          href={Routes.poc_path(MyAppWeb.Endpoint, :show_alert_modal)}
+          href={Routes.components_path(MyAppWeb.Endpoint, :show_alert_modal)}
           label="Label"
           variant="primary"
         />
         <.button
           type="link"
-          href={Routes.poc_path(MyAppWeb.Endpoint, :show_alert_modal)}
+          href={Routes.components_path(MyAppWeb.Endpoint, :show_alert_modal)}
           variant="primary"
         >Slot</.button>
         <.button
           type="link"
           variant={{:custom, "bg-green-600 hover:bg-green-700 text-white border-transparent focus:ring-green-700"}}
-          href={Routes.poc_path(MyAppWeb.Endpoint, :show_alert_modal)}
+          href={Routes.components_path(MyAppWeb.Endpoint, :show_alert_modal)}
           label="Custom Variant"
         />
-      </div>
-      <h2 class="text-lg font-medium text-gray-500 mt-2 mb-2">Buttons</h2>
-      <div class="flex flex-wrap items-center gap-4">
+      </.button_container>
+      <.h2>Buttons</.h2>
+      <.button_container>
         <.button click="button_click" label="Label" variant="primary" />
         <.button click="button_click" variant="primary">Slot</.button>
         <.button click="button_click" label="Custom Variant" variant={{:custom, "bg-green-600 hover:bg-green-700 text-white border-transparent focus:ring-green-700"}} />
-      </div>
-      <h2 class="text-lg font-medium text-gray-500 mt-2 mb-2">Submit</h2>
-      <.form for={:form} phx-submit="form_submit" class="flex flex-wrap items-center gap-4">
-        <.button type="submit" label="Label" variant="primary" />
-        <.button type="submit" variant="primary">Slot</.button>
-        <.button type="submit" label="Custom Variant" variant={{:custom, "bg-green-600 hover:bg-green-700 text-white border-transparent focus:ring-green-700"}} />
+      </.button_container>
+      <.h2>Submit</.h2>
+      <.form for={:form} phx-submit="form_submit">
+        <.button_container>
+          <.button type="submit" label="Label" variant="primary" />
+          <.button type="submit" variant="primary">Slot</.button>
+          <.button type="submit" label="Custom Variant" variant={{:custom, "bg-green-600 hover:bg-green-700 text-white border-transparent focus:ring-green-700"}} />
+        </.button_container>
       </.form>
-      <h2 class="text-lg font-medium text-gray-500 mt-2 mb-2">Sizes</h2>
-      <div class="flex flex-wrap items-center gap-4">
+      <.h2>Sizes</.h2>
+      <.button_container>
         <.button click="button_click" label="Small (sm)" variant="primary" size="sm" />
         <.button click="button_click" label="Normal (md)" variant="primary" size="md" />
         <.button click="button_click" label="Large (lg)" variant="primary" size="lg" />
-      </div>
+      </.button_container>
+      <.h1>Tables</.h1>
+      <.h2>Simple Table</.h2>
+      <.table class="mb-8">
+        <.head>
+          <.row>
+            <.th class="w-1/4">Heading 1</.th>
+            <.th>Heading 2</.th>
+          </.row>
+        </.head>
+        <.body>
+          <.row>
+            <.td>Row 1</.td>
+            <.td>Something here</.td>
+          </.row>
+          <.row class="bg-red-700 text-white">
+            <.td>Row 2</.td>
+            <.td>Something here</.td>
+          </.row>
+        </.body>
+      </.table>
+      <.h2>Data Table</.h2>
+      <.data_table items={@data_table_items} class="mb-8">
+        <:col let={item} label="ID" th_class="w-1/4">
+          <%= item.id %>
+        </:col>
+        <:col let={item} label="Name">
+          <%= item.name %>
+        </:col>
+      </.data_table>
+      <.h2>Empty Data Table</.h2>
+      <.data_table items={[]} class="mb-8">
+        <:col let={item} label="ID" th_class="w-1/4">
+          <%= item.id %>
+        </:col>
+        <:col let={item} label="Name">
+          <%= item.name %>
+        </:col>
+      </.data_table>
+
       <%= if connected?(@socket) do %>
         <%= if @live_action == :show_alert_modal do %>
           <.alert_modal heading="Alert Modal" ok="alert_modal_ok">
@@ -115,6 +158,30 @@ defmodule MyAppWeb.PocLive do
     """
   end
 
+  defp h1(assigns) do
+    assigns = assign_new(assigns, :label, fn -> nil end)
+
+    ~H"""
+    <h1 class="text-2xl font-medium mb-2"><%= @label || render_slot(@inner_block) %></h1>
+    """
+  end
+
+  defp h2(assigns) do
+    assigns = assign_new(assigns, :label, fn -> nil end)
+
+    ~H"""
+    <h2 class="text-lg font-medium text-gray-500 mb-2"><%= @label || render_slot(@inner_block) %></h2>
+    """
+  end
+
+  defp button_container(assigns) do
+    ~H"""
+    <div class="flex flex-wrap items-center gap-4 mb-8">
+      <%= render_slot(@inner_block) %>
+    </div>
+    """
+  end
+
   def handle_params(params, _url, socket) do
     {:noreply, apply_action(socket, params, socket.assigns.live_action)}
   end
@@ -131,7 +198,7 @@ defmodule MyAppWeb.PocLive do
     socket =
       socket
       |> add_toast(:success, "Custom modal doing it")
-      |> push_patch(to: Routes.poc_path(socket, :index))
+      |> push_patch(to: Routes.components_path(socket, :index))
 
     {:noreply, socket}
   end
@@ -140,7 +207,7 @@ defmodule MyAppWeb.PocLive do
     socket =
       socket
       |> add_toast(:info, "Custom modal closed")
-      |> push_patch(to: Routes.poc_path(socket, :index))
+      |> push_patch(to: Routes.components_path(socket, :index))
 
     {:noreply, socket}
   end
@@ -173,7 +240,7 @@ defmodule MyAppWeb.PocLive do
     socket =
       socket
       |> add_toast(type, "Hello toast and patch")
-      |> push_patch(to: Routes.poc_path(socket, :index))
+      |> push_patch(to: Routes.components_path(socket, :index))
 
     {:noreply, socket}
   end
@@ -182,7 +249,7 @@ defmodule MyAppWeb.PocLive do
     socket =
       socket
       |> add_toast(:error, "Hello toast and redirect")
-      |> push_redirect(to: Routes.poc_path(socket, :index))
+      |> push_redirect(to: Routes.components_path(socket, :index))
 
     {:noreply, socket}
   end
@@ -190,7 +257,7 @@ defmodule MyAppWeb.PocLive do
   def handle_event("alert_modal_ok", _, socket) do
     socket =
       socket
-      |> push_patch(to: Routes.poc_path(socket, :index))
+      |> push_patch(to: Routes.components_path(socket, :index))
 
     {:noreply, socket}
   end
@@ -199,7 +266,7 @@ defmodule MyAppWeb.PocLive do
     socket =
       socket
       |> add_toast(:success, "Wow, you confirmed, stand by...")
-      |> push_patch(to: Routes.poc_path(socket, :index))
+      |> push_patch(to: Routes.components_path(socket, :index))
 
     {:noreply, socket}
   end
@@ -208,7 +275,7 @@ defmodule MyAppWeb.PocLive do
     socket =
       socket
       |> add_toast(:info, "Cancelled, that's a good call")
-      |> push_patch(to: Routes.poc_path(socket, :index))
+      |> push_patch(to: Routes.components_path(socket, :index))
 
     {:noreply, socket}
   end
@@ -217,7 +284,7 @@ defmodule MyAppWeb.PocLive do
     socket =
       socket
       |> add_toast(:info, "Cancelled form modal")
-      |> push_patch(to: Routes.poc_path(socket, :index))
+      |> push_patch(to: Routes.components_path(socket, :index))
 
     {:noreply, socket}
   end
@@ -226,7 +293,7 @@ defmodule MyAppWeb.PocLive do
     socket =
       socket
       |> add_toast(:info, "Submitted form modal")
-      |> push_patch(to: Routes.poc_path(socket, :index))
+      |> push_patch(to: Routes.components_path(socket, :index))
 
     {:noreply, socket}
   end
@@ -235,7 +302,7 @@ defmodule MyAppWeb.PocLive do
     socket =
       socket
       |> add_toast(:info, "Submitted form")
-      |> push_patch(to: Routes.poc_path(socket, :index))
+      |> push_patch(to: Routes.components_path(socket, :index))
 
     {:noreply, socket}
   end
@@ -256,7 +323,7 @@ defmodule MyAppWeb.PocLive do
     socket =
       socket
       |> add_toast(:success, "Local message received")
-      |> push_patch(to: Routes.poc_path(socket, :index))
+      |> push_patch(to: Routes.components_path(socket, :index))
 
     {:noreply, socket}
   end
