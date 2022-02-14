@@ -49,6 +49,8 @@ defmodule MyAppWeb.Table do
   defp th_class(%{th_class: th_class}), do: th_class
   defp th_class(_), do: ""
 
+  # assigns:
+  #     :class        required: false, default: nil (extra classes to add to the default)
   def table(assigns) do
     extra = assigns_to_attributes(assigns, [:class])
 
@@ -58,7 +60,7 @@ defmodule MyAppWeb.Table do
       |> assign_new(:class, fn -> nil end)
 
     ~H"""
-    <div class={"flex flex-col #{@class}"}>
+    <div class={@class}>
       <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
           <div class="overflow-hidden border-b border-gray-100">

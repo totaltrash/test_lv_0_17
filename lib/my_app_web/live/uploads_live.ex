@@ -16,7 +16,7 @@ defmodule MyAppWeb.UploadsLive do
     <.wrapper current_menu="uploads" title="Uploads">
       <form id="upload-form" phx-submit="save" phx-change="validate">
         <%= live_file_input @uploads.avatar, class: "ZZsr-only" %>
-        <.button type="submit" label="Upload" variant="primary" />
+        <.button type="submit" label="Upload" color="primary" />
       </form>
 
       <%# use phx-drop-target with the upload ref to enable file drag and drop %>

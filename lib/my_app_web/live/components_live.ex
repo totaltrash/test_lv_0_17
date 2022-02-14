@@ -6,8 +6,10 @@ defmodule MyAppWeb.ComponentsLive do
   import MyAppWeb.Page
   import MyAppWeb.Modal
   import MyAppWeb.Button
+  import MyAppWeb.Link
   import MyAppWeb.Form
   import MyAppWeb.Table
+  import MyAppWeb.Icon
 
   def mount(_, _session, socket) do
     MyAppWeb.Endpoint.subscribe(@topic)
@@ -19,72 +21,124 @@ defmodule MyAppWeb.ComponentsLive do
     ~H"""
     <.wrapper current_menu="components" title="Components">
       <.h1>Modals</.h1>
-      <.button_container>
-        <.button type="link" variant="primary" href={Routes.components_path(MyAppWeb.Endpoint, :show_alert_modal)} label="Alert Modal" />
-        <.button type="link" variant="primary" href={Routes.components_path(MyAppWeb.Endpoint, :show_confirm_modal)} label="Confirm Modal" />
-        <.button type="link" variant="primary" href={Routes.components_path(MyAppWeb.Endpoint, :show_form_modal)} label="Form Modal" />
-        <.button type="link" variant="primary" href={Routes.components_path(MyAppWeb.Endpoint, :show_custom_modal)} label="Custom Modal" />
-      </.button_container>
+      <.components_container>
+        <.button type="link" color="primary" href={Routes.components_path(MyAppWeb.Endpoint, :show_alert_modal)} label="Alert Modal" />
+        <.button type="link" color="primary" href={Routes.components_path(MyAppWeb.Endpoint, :show_confirm_modal)} label="Confirm Modal" />
+        <.button type="link" color="primary" href={Routes.components_path(MyAppWeb.Endpoint, :show_form_modal)} label="Form Modal" />
+        <.button type="link" color="primary" href={Routes.components_path(MyAppWeb.Endpoint, :show_custom_modal)} label="Custom Modal" />
+      </.components_container>
       <.h1>Flashes</.h1>
-      <.button_container>
-        <.button click="add_flash" label="Add Flash" phx-value-type={:error} variant="danger" />
-        <.button click="add_flash" label="Add Flash" phx-value-type={:info} variant="primary" />
-        <.button click="add_flash" label="Add Flash" phx-value-type={:success} variant={{:custom, "bg-green-600 hover:bg-green-700 text-white border-transparent focus:ring-green-700"}} />
-      </.button_container>
+      <.components_container>
+        <.button click="add_flash" label="Add Flash" phx-value-type={:error} color="danger" />
+        <.button click="add_flash" label="Add Flash" phx-value-type={:info} color="primary" />
+        <.button click="add_flash" label="Add Flash" phx-value-type={:success} color={{:custom, "bg-green-600 hover:bg-green-700 text-white border-transparent focus:ring-green-700"}} />
+      </.components_container>
       <.h1>Toasts</.h1>
-      <.button_container>
-        <.button click="add_toast" label="Add Toast" phx-value-type={:error} variant="danger" />
-        <.button click="add_toast" label="Add Toast" phx-value-type={:info} variant="primary" />
-        <.button click="add_toast" label="Add Toast" phx-value-type={:success} variant={{:custom, "bg-green-600 hover:bg-green-700 text-white border-transparent focus:ring-green-700"}} />
-        <.button click="add_toast_and_patch" label="Add Toast and Patch" phx-value-type={:success} variant="primary" />
-        <.button click="add_toast_and_redirect" label="Add Toast and redirect" phx-value-type={:success} variant="primary" />
-      </.button_container>
+      <.components_container>
+        <.button click="add_toast" label="Add Toast" phx-value-type={:error} color="danger" />
+        <.button click="add_toast" label="Add Toast" phx-value-type={:info} color="primary" />
+        <.button click="add_toast" label="Add Toast" phx-value-type={:success} color={{:custom, "bg-green-600 hover:bg-green-700 text-white border-transparent focus:ring-green-700"}} />
+        <.button click="add_toast_and_patch" label="Add Toast and Patch" phx-value-type={:success} color="primary" />
+        <.button click="add_toast_and_redirect" label="Add Toast and redirect" phx-value-type={:success} color="primary" />
+      </.components_container>
       <.h1>Messages</.h1>
-      <.button_container>
-        <.button click="send_local_message" label="Send Local Message" variant="primary" />
-        <.button click="send_global_message" label="Send Global Message" variant="primary" />
-      </.button_container>
+      <.components_container>
+        <.button click="send_local_message" label="Send Local Message" color="primary" />
+        <.button click="send_global_message" label="Send Global Message" color="primary" />
+      </.components_container>
       <.h1>Buttons</.h1>
       <.h2>Links</.h2>
-      <.button_container>
+      <.components_container>
         <.button
           type="link"
           href={Routes.components_path(MyAppWeb.Endpoint, :show_alert_modal)}
           label="Label"
-          variant="primary"
+          color="primary"
         />
         <.button
           type="link"
           href={Routes.components_path(MyAppWeb.Endpoint, :show_alert_modal)}
-          variant="primary"
+          color="primary"
         >Slot</.button>
         <.button
           type="link"
-          variant={{:custom, "bg-green-600 hover:bg-green-700 text-white border-transparent focus:ring-green-700"}}
+          color={{:custom, "bg-green-600 hover:bg-green-700 text-white border-transparent focus:ring-green-700"}}
           href={Routes.components_path(MyAppWeb.Endpoint, :show_alert_modal)}
-          label="Custom Variant"
+          label="Custom Color"
         />
-      </.button_container>
+        <.button
+          type="link"
+          link_type="redirect"
+          href={Routes.components_path(MyAppWeb.Endpoint, :index)}
+          label="Redirect"
+          color="primary"
+        />
+        <.button
+          type="link"
+          link_type="external"
+          href="https://www.thinkactively.com.au"
+          label="External"
+          target="_blank"
+          color="primary"
+        />
+      </.components_container>
       <.h2>Buttons</.h2>
-      <.button_container>
-        <.button click="button_click" label="Label" variant="primary" />
-        <.button click="button_click" variant="primary">Slot</.button>
-        <.button click="button_click" label="Custom Variant" variant={{:custom, "bg-green-600 hover:bg-green-700 text-white border-transparent focus:ring-green-700"}} />
-      </.button_container>
+      <.components_container>
+        <.button click="button_click" label="Label" color="primary" />
+        <.button click="button_click" color="primary">Slot</.button>
+        <.button click="button_click" label="Custom Color" color={{:custom, "bg-green-600 hover:bg-green-700 text-white border-transparent focus:ring-green-700"}} />
+      </.components_container>
       <.h2>Submit</.h2>
       <.form for={:form} phx-submit="form_submit">
-        <.button_container>
-          <.button type="submit" label="Label" variant="primary" />
-          <.button type="submit" variant="primary">Slot</.button>
-          <.button type="submit" label="Custom Variant" variant={{:custom, "bg-green-600 hover:bg-green-700 text-white border-transparent focus:ring-green-700"}} />
-        </.button_container>
+        <.components_container>
+          <.button type="submit" label="Label" color="primary" />
+          <.button type="submit" color="primary">Slot</.button>
+          <.button type="submit" label="Custom Color" color={{:custom, "bg-green-600 hover:bg-green-700 text-white border-transparent focus:ring-green-700"}} />
+        </.components_container>
       </.form>
       <.h2>Sizes</.h2>
-      <.button_container>
-        <.button click="button_click" label="Small (sm)" variant="primary" size="sm" />
-        <.button click="button_click" label="Normal (md)" variant="primary" size="md" />
-        <.button click="button_click" label="Large (lg)" variant="primary" size="lg" />
-      </.button_container>
+      <.components_container>
+        <.button click="button_click" label="Small (sm)" color="primary" size="sm" />
+        <.button click="button_click" label="Normal (md)" color="primary" size="md" />
+        <.button click="button_click" label="Large (lg)" color="primary" size="lg" />
+      </.components_container>
+      <.h1>Links</.h1>
+      <.components_container>
+        <.link
+          href={Routes.components_path(MyAppWeb.Endpoint, :show_alert_modal)}
+          label="Label"
+        />
+        <.link
+          href={Routes.components_path(MyAppWeb.Endpoint, :show_alert_modal)}
+        >Slot</.link>
+        <.link
+          href={Routes.components_path(MyAppWeb.Endpoint, :show_alert_modal)}
+          label="Danger"
+          color="danger"
+        />
+        <.link
+          link_type="redirect"
+          href={Routes.components_path(MyAppWeb.Endpoint, :index)}
+          label="Redirect"
+        />
+        <.link
+          href="https://www.thinkactively.com.au"
+          link_type="external"
+          label="External"
+          target="_blank"
+        />
+        <.link
+          color={{:custom, "text-green-600 hover:text-green-800 focus:text-green-800"}}
+          href={Routes.components_path(MyAppWeb.Endpoint, :show_alert_modal)}
+          label="Custom Color"
+        />
+        <.link
+          class="focus:outline-indigo-700 text-indigo-500 hover:text-indigo-700 hover:underline focus:underline"
+          href={Routes.components_path(MyAppWeb.Endpoint, :show_alert_modal)}
+          label="Override Class"
+        />
+      </.components_container>
+
       <.h1>Tables</.h1>
       <.h2>Simple Table</.h2>
       <.table class="mb-8">
@@ -123,7 +177,15 @@ defmodule MyAppWeb.ComponentsLive do
           <%= item.name %>
         </:col>
       </.data_table>
-
+      <.h1>Boolean Icon</.h1>
+      <.components_container>
+        <.boolean_icon value={true} />
+        <.boolean_icon value={false} />
+        <.boolean_icon value={true} type="solid" />
+        <.boolean_icon value={false} type="solid" />
+        <.boolean_icon value={true} class="h-12 w-12" type="solid" />
+        <.boolean_icon value={false} class="h-12 w-12" type="solid" />
+      </.components_container>
       <%= if connected?(@socket) do %>
         <%= if @live_action == :show_alert_modal do %>
           <.alert_modal heading="Alert Modal" ok="alert_modal_ok">
@@ -148,7 +210,7 @@ defmodule MyAppWeb.ComponentsLive do
           <.modal heading="Custom Modal" close="custom_modal_close" icon="exclamation" icon_color="bg-red-100 text-red-700">
             Hey, are you sure?
             <:buttons>
-              <.modal_button label="Do It" variant="danger" click="custom_modal_do_it" />
+              <.modal_button label="Do It" color="danger" click="custom_modal_do_it" />
               <.modal_button label="Cancel" click="custom_modal_close" />
             </:buttons>
           </.modal>
@@ -174,7 +236,7 @@ defmodule MyAppWeb.ComponentsLive do
     """
   end
 
-  defp button_container(assigns) do
+  defp components_container(assigns) do
     ~H"""
     <div class="flex flex-wrap items-center gap-4 mb-8">
       <%= render_slot(@inner_block) %>

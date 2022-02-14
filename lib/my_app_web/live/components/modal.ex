@@ -19,7 +19,7 @@ defmodule MyAppWeb.Modal do
     <.modal heading={@heading} icon="bell">
       <%= render_slot(@inner_block) %>
       <:buttons>
-        <.modal_button label="OK" variant="primary" click={@ok} />
+        <.modal_button label="OK" color="primary" click={@ok} />
       </:buttons>
     </.modal>
     """
@@ -41,8 +41,8 @@ defmodule MyAppWeb.Modal do
     <.modal heading={@heading} icon="question-mark-circle">
       <%= render_slot(@inner_block) %>
       <:buttons>
-        <.modal_button label="OK" variant="primary" click={@ok} />
-        <.modal_button label="Cancel" variant="modal_default" click={@cancel} />
+        <.modal_button label="OK" color="primary" click={@ok} />
+        <.modal_button label="Cancel" color="modal_default" click={@cancel} />
       </:buttons>
     </.modal>
     """
@@ -65,8 +65,8 @@ defmodule MyAppWeb.Modal do
     <.modal heading={@heading} let={f} form={@form} form_submit={@form_submit} icon="pencil">
       <%= render_slot(@inner_block, f) %>
       <:buttons>
-        <.modal_button label="Submit" variant="primary" type="submit" />
-        <.modal_button label="Cancel" variant="modal_default" click={@cancel} />
+        <.modal_button label="Submit" color="primary" type="submit" />
+        <.modal_button label="Cancel" color="modal_default" click={@cancel} />
       </:buttons>
     </.modal>
     """
@@ -155,7 +155,7 @@ defmodule MyAppWeb.Modal do
         :label    required: true
         :type     required: false, default: "button", options: ["button", "submit"]
         :click    required: false, default: false (should be provided if type == "button", not if type == "submit")
-        :variant  required: false, default: "modal_default"
+        :color    required: false, default: "modal_default"
 
   """
   def modal_button(assigns) do
@@ -163,13 +163,13 @@ defmodule MyAppWeb.Modal do
       assigns
       |> assign_new(:type, fn -> "button" end)
       |> assign_new(:click, fn -> false end)
-      |> assign_new(:variant, fn -> "modal_default" end)
+      |> assign_new(:color, fn -> "modal_default" end)
 
     ~H"""
     <button
       type={@type}
       phx-click={@click}
-      class={"#{button_base_class()} #{Button.variant(@variant)}"}
+      class={"#{button_base_class()} #{Button.color(@color)}"}
     >
       <%= @label %>
     </button>
