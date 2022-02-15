@@ -2,6 +2,7 @@ defmodule MyAppWeb.Button do
   use Phoenix.Component
 
   import MyAppWeb.Link
+  import Heroicons.LiveView
 
   # assigns:
   #     :label        required: false, default: nil (component expects a slot if no label)
@@ -16,7 +17,9 @@ defmodule MyAppWeb.Button do
         :type,
         :label,
         :color,
-        :size
+        :size,
+        :icon,
+        :right_icon
       ])
 
     assigns =
@@ -25,13 +28,17 @@ defmodule MyAppWeb.Button do
       |> assign_new(:label, fn -> nil end)
       |> assign_new(:color, fn -> "default" end)
       |> assign_new(:size, fn -> "normal" end)
+      |> assign_new(:icon, fn -> nil end)
+      |> assign_new(:right_icon, fn -> nil end)
 
     ~H"""
       <.link
         {@extra_attributes}
         class={"#{base_class()} #{color(@color)} #{size(@size)}"}
       >
+        <.button_icon icon={@icon}/>
         <%= @label || render_slot(@inner_block) %>
+        <.right_button_icon icon={@right_icon}/>
       </.link>
     """
   end
@@ -47,7 +54,9 @@ defmodule MyAppWeb.Button do
         :type,
         :label,
         :color,
-        :size
+        :size,
+        :icon,
+        :right_icon
       ])
 
     assigns =
@@ -56,6 +65,8 @@ defmodule MyAppWeb.Button do
       |> assign_new(:label, fn -> nil end)
       |> assign_new(:color, fn -> "default" end)
       |> assign_new(:size, fn -> "normal" end)
+      |> assign_new(:icon, fn -> nil end)
+      |> assign_new(:right_icon, fn -> nil end)
 
     ~H"""
       <button
@@ -63,7 +74,9 @@ defmodule MyAppWeb.Button do
         {@extra}
         class={"#{base_class()} #{color(@color)} #{size(@size)}"}
       >
+        <.button_icon icon={@icon}/>
         <%= @label || render_slot(@inner_block) %>
+        <.right_button_icon icon={@right_icon}/>
       </button>
     """
   end
@@ -82,6 +95,8 @@ defmodule MyAppWeb.Button do
         :label,
         :color,
         :size,
+        :icon,
+        :right_icon,
         :click
       ])
 
@@ -92,6 +107,8 @@ defmodule MyAppWeb.Button do
       |> assign_new(:label, fn -> nil end)
       |> assign_new(:color, fn -> "default" end)
       |> assign_new(:size, fn -> "normal" end)
+      |> assign_new(:icon, fn -> nil end)
+      |> assign_new(:right_icon, fn -> nil end)
 
     ~H"""
       <button
@@ -100,14 +117,16 @@ defmodule MyAppWeb.Button do
         {@extra}
         class={"#{base_class()} #{color(@color)} #{size(@size)}"}
       >
+        <.button_icon icon={@icon}/>
         <%= @label || render_slot(@inner_block) %>
+        <.right_button_icon icon={@right_icon}/>
       </button>
     """
   end
 
   defp base_class(),
     do:
-      "flex items-center justify-center border rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2"
+      "flex items-center justify-center border rounded focus:outline-none focus:ring-2 focus:ring-offset-2"
 
   def color("primary"),
     do: "bg-sky-600 hover:bg-sky-700 text-white border-transparent focus:ring-sky-500"
@@ -127,4 +146,20 @@ defmodule MyAppWeb.Button do
   defp size("sm"), do: "px-4 py-2 text-base font-medium md:py-1 md:text-xs md:px-3"
   defp size("lg"), do: "px-4 py-2 text-base font-medium md:py-3 md:text-xl md:px-6"
   defp size(_), do: "px-4 py-2 text-base font-medium md:py-2 md:px-4 md:text-sm"
+
+  defp button_icon(%{icon: nil} = assigns), do: ~H[]
+
+  defp button_icon(assigns) do
+    ~H"""
+      <.icon name={@icon} type="solid" class="-ml-2 mr-1 h-5 w-5" />
+    """
+  end
+
+  defp right_button_icon(%{icon: nil} = assigns), do: ~H[]
+
+  defp right_button_icon(assigns) do
+    ~H"""
+      <.icon name={@icon} type="solid" class="-mr-2 ml-1 h-5 w-5" />
+    """
+  end
 end

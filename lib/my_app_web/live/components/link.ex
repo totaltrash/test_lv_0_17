@@ -6,14 +6,15 @@ defmodule MyAppWeb.Link do
   #     :color        required: false, default: "default", options: ["default", "danger", {:custom, "custome classes"}]
   #     :link_type    required: false, default: "patch", options: ["patch", "redirect", "external"]
   #     :link_state   required: false, default: "push", options: ["push", "replace"]
-  #     :class        required: false, (allows to override the classes used internally, will ignore the color. For fine tuning appearance, used by buttons etc)
+  #     :class        required: false, (treated as an extra attribute, if added, allows to override the classes used internally, will ignore the color. For fine tuning appearance, used by buttons etc)
   def link(assigns) do
     extra_attributes =
       assigns_to_attributes(assigns, [
         :label,
         :color,
         :link_type,
-        :link_state
+        :link_state,
+        :class
       ])
 
     assigns =

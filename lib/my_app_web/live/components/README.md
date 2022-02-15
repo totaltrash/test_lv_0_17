@@ -1,10 +1,14 @@
 Components
 ==========
 
-Ommissions
-----------
+Issues
+------
 
-Links (including Buttons with type of link) do not currently support external links (data-phx-link and state attributes are added)
+Lots of duplication in Button.button:
+
+  * skip list in assigns_to_attributes
+  * assigning defaults
+  * rendering content within the button or a
 
 Sizes
 -----

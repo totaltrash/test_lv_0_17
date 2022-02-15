@@ -10,6 +10,7 @@ defmodule MyAppWeb.ComponentsLive do
   import MyAppWeb.Form
   import MyAppWeb.Table
   import MyAppWeb.Icon
+  import MyAppWeb.Dropdown
 
   def mount(_, _session, socket) do
     MyAppWeb.Endpoint.subscribe(@topic)
@@ -62,6 +63,21 @@ defmodule MyAppWeb.ComponentsLive do
         >Slot</.button>
         <.button
           type="link"
+          href={Routes.components_path(MyAppWeb.Endpoint, :show_alert_modal)}
+          label="Icon"
+          color="primary"
+          icon="home"
+        />
+        <.button
+          type="link"
+          href={Routes.components_path(MyAppWeb.Endpoint, :show_alert_modal)}
+          label="Double Icon"
+          color="primary"
+          icon="home"
+          right_icon="star"
+        />
+        <.button
+          type="link"
           color={{:custom, "bg-green-600 hover:bg-green-700 text-white border-transparent focus:ring-green-700"}}
           href={Routes.components_path(MyAppWeb.Endpoint, :show_alert_modal)}
           label="Custom Color"
@@ -86,6 +102,8 @@ defmodule MyAppWeb.ComponentsLive do
       <.components_container>
         <.button click="button_click" label="Label" color="primary" />
         <.button click="button_click" color="primary">Slot</.button>
+        <.button click="button_click" label="Icon" icon="home" color="primary" />
+        <.button click="button_click" label="Double Icon" icon="home" right_icon="star" color="primary" />
         <.button click="button_click" label="Custom Color" color={{:custom, "bg-green-600 hover:bg-green-700 text-white border-transparent focus:ring-green-700"}} />
       </.components_container>
       <.h2>Submit</.h2>
@@ -93,6 +111,8 @@ defmodule MyAppWeb.ComponentsLive do
         <.components_container>
           <.button type="submit" label="Label" color="primary" />
           <.button type="submit" color="primary">Slot</.button>
+          <.button type="submit" label="Icon" icon="home" color="primary" />
+          <.button type="submit" label="Double Icon" icon="home" right_icon="star" color="primary" />
           <.button type="submit" label="Custom Color" color={{:custom, "bg-green-600 hover:bg-green-700 text-white border-transparent focus:ring-green-700"}} />
         </.components_container>
       </.form>
@@ -137,6 +157,82 @@ defmodule MyAppWeb.ComponentsLive do
           href={Routes.components_path(MyAppWeb.Endpoint, :show_alert_modal)}
           label="Override Class"
         />
+      </.components_container>
+      <.h1>Dropdowns</.h1>
+      <.components_container>
+        <.dropdown
+          label="Dropdown Left"
+          color="primary"
+          align="left"
+          id="dropdown_1"
+          icon="home"
+        >
+          <.dropdown_heading label="Some Heading" />
+          <.dropdown_link
+            label="Link"
+            href={Routes.components_path(MyAppWeb.Endpoint, :show_alert_modal)}
+          />
+          <.dropdown_link
+            label="With icon"
+            icon="home"
+            href={Routes.components_path(MyAppWeb.Endpoint, :show_alert_modal)}
+          />
+          <.dropdown_divider />
+          <.dropdown_link
+            label="Redirect link"
+            link_type="redirect"
+            href={Routes.components_path(MyAppWeb.Endpoint, :show_alert_modal)}
+          />
+          <.dropdown_link
+            label="Link to external, new tab"
+            link_type="external"
+            href="https://www.thinkactively.com.au"
+            target="_blank"
+          />
+        </.dropdown>
+        <.dropdown
+          label="Drop Up"
+          color="primary"
+          align="left"
+          direction="up"
+          id="dropdown_2"
+        >
+          <.dropdown_link
+            label="Link to external, new tab"
+            link_type="external"
+            href="https://www.thinkactively.com.au"
+            target="_blank"
+          />
+        </.dropdown>
+        <.dropdown
+          label="Dropdown"
+          color="primary"
+          id="dropdown_3"
+          icon="home"
+        >
+          <.dropdown_heading label="Some Heading" />
+          <.dropdown_link
+            label="Link"
+            href={Routes.components_path(MyAppWeb.Endpoint, :show_alert_modal)}
+          />
+          <.dropdown_link
+            label="With icon"
+            icon="home"
+            href={Routes.components_path(MyAppWeb.Endpoint, :show_alert_modal)}
+          />
+          <.dropdown_divider />
+          <.dropdown_link
+            label="Redirect link"
+            link_type="redirect"
+            href={Routes.components_path(MyAppWeb.Endpoint, :show_alert_modal)}
+          />
+          <.dropdown_link
+            label="Link to external, new tab"
+            link_type="external"
+            href="https://www.thinkactively.com.au"
+            target="_blank"
+          />
+        </.dropdown>
       </.components_container>
 
       <.h1>Tables</.h1>

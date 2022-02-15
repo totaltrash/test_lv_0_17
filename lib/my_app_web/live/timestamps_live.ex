@@ -54,7 +54,7 @@ defmodule MyAppWeb.TimestampsLive do
           <.modal heading={@event.title} close="show_modal_close" icon="calendar">
             <.timestamp_detail timestamp={@event.start_on} />
             <:buttons>
-              <.modal_button label="OK" variant="primary" click="show_modal_close" />
+              <.modal_button label="OK" color="primary" click="show_modal_close" />
             </:buttons>
           </.modal>
         <% end %>
