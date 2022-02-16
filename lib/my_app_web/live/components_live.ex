@@ -21,6 +21,17 @@ defmodule MyAppWeb.ComponentsLive do
   def render(assigns) do
     ~H"""
     <.wrapper current_menu="components" title="Components">
+      <.h1>Clearable Text Input</.h1>
+      <.components_container>
+        <.form let={f} for={:form} phx-submit="form_submit">
+          <.clearable_text_input
+            form={f}
+            field={:test_clearable}
+            value="Test"
+            class=""
+          />
+        </.form>
+      </.components_container>
       <.h1>Modals</.h1>
       <.components_container>
         <.button type="link" color="primary" href={Routes.components_path(MyAppWeb.Endpoint, :show_alert_modal)} label="Alert Modal" />
@@ -165,7 +176,7 @@ defmodule MyAppWeb.ComponentsLive do
           color="primary"
           align="left"
           id="dropdown_1"
-          icon="home"
+          icon="cog"
         >
           <.dropdown_heading label="Some Heading" />
           <.dropdown_link
@@ -193,7 +204,6 @@ defmodule MyAppWeb.ComponentsLive do
         <.dropdown
           label="Drop Up"
           color="primary"
-          align="left"
           direction="up"
           id="dropdown_2"
         >
@@ -208,7 +218,7 @@ defmodule MyAppWeb.ComponentsLive do
           label="Dropdown"
           color="primary"
           id="dropdown_3"
-          icon="home"
+          icon="cog"
         >
           <.dropdown_heading label="Some Heading" />
           <.dropdown_link
