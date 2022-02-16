@@ -10,6 +10,14 @@ Lots of duplication in Button.button:
   * assigning defaults
   * rendering content within the button or a
 
+Paginator
+
+  * Some wrapper classes applied (top border, white background). This should be left to the parent to define?
+
+Clearable text input
+
+  * See comments
+
 Sizes
 -----
 

@@ -11,16 +11,28 @@ defmodule MyAppWeb.ComponentsLive do
   import MyAppWeb.Table
   import MyAppWeb.Icon
   import MyAppWeb.Dropdown
+  import MyAppWeb.Paginator
 
   def mount(_, _session, socket) do
     MyAppWeb.Endpoint.subscribe(@topic)
-    socket = assign(socket, data_table_items: [%{id: 1, name: "Some Name"}])
+
+    socket =
+      socket
+      |> assign(data_table_items: [%{id: 1, name: "Some Name"}])
+      |> assign(paginator_offset: 0)
+      |> assign(paginator_limit: 10)
+
     {:ok, socket}
   end
 
   def render(assigns) do
     ~H"""
     <.wrapper current_menu="components" title="Components">
+      <.h1>Paginator</.h1>
+      <.components_container>
+        <.paginator offset={@paginator_offset} limit={@paginator_limit} count={95} size={2} change_page="change_page" />
+      </.components_container>
+
       <.h1>Clearable Text Input</.h1>
       <.components_container>
         <.form let={f} for={:form} phx-submit="form_submit">
@@ -360,6 +372,14 @@ defmodule MyAppWeb.ComponentsLive do
 
   defp apply_action(socket, _, _) do
     socket
+  end
+
+  def handle_event("change_page", %{"page" => page}, socket) do
+    socket =
+      socket
+      |> assign(paginator_offset: (String.to_integer(page) - 1) * socket.assigns.paginator_limit)
+
+    {:noreply, socket}
   end
 
   def handle_event("custom_modal_do_it", _, socket) do
