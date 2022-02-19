@@ -146,10 +146,6 @@ defmodule MyAppWeb.TimestampsLive do
     {:noreply, push_patch(socket, to: Routes.timestamps_path(socket, :index))}
   end
 
-  defp format_datetime(assigns) do
-    ~H[<%= Timex.Timezone.convert(@datetime, "Australia/Melbourne") |> Calendar.strftime("%d/%m/%Y %H:%M:%S") %>]
-  end
-
   defp local_param_to_utc("") do
     ""
   end

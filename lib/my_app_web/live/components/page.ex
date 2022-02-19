@@ -4,6 +4,34 @@ defmodule MyAppWeb.Page do
   alias MyAppWeb.Router.Helpers, as: Routes
   alias Phoenix.LiveView.JS
 
+  def h1(assigns) do
+    assigns = assign_new(assigns, :label, fn -> nil end)
+
+    ~H"""
+    <h1 class="text-2xl font-medium mb-2"><%= @label || render_slot(@inner_block) %></h1>
+    """
+  end
+
+  def h2(assigns) do
+    assigns = assign_new(assigns, :label, fn -> nil end)
+
+    ~H"""
+    <h2 class="text-lg font-medium text-gray-500 mb-2"><%= @label || render_slot(@inner_block) %></h2>
+    """
+  end
+
+  def components_container(assigns) do
+    ~H"""
+    <div class="flex flex-wrap items-center gap-4 mb-8">
+      <%= render_slot(@inner_block) %>
+    </div>
+    """
+  end
+
+  def format_datetime(assigns) do
+    ~H[<%= Timex.Timezone.convert(@datetime, "Australia/Melbourne") |> Calendar.strftime("%d/%m/%Y %H:%M:%S") %>]
+  end
+
   defp menu_items do
     [
       %{id: "home", label: "Home", path: Routes.home_path(MyAppWeb.Endpoint, :index)},
@@ -13,8 +41,13 @@ defmodule MyAppWeb.Page do
         path: Routes.components_path(MyAppWeb.Endpoint, :index)
       },
       %{
+        id: "resource_data_tables",
+        label: "Resource Data Tables",
+        path: Routes.resource_data_tables_path(MyAppWeb.Endpoint, :index)
+      },
+      %{
         id: "temporary_assigns",
-        label: "Temp Ass",
+        label: "Temp Assigns",
         path: Routes.temporary_assigns_path(MyAppWeb.Endpoint, :index)
       },
       %{
@@ -28,57 +61,6 @@ defmodule MyAppWeb.Page do
         path: Routes.uploads_path(MyAppWeb.Endpoint, :index)
       }
     ]
-  end
-
-  defp get_item_class(menu_item, current_menu) do
-    if current_menu == menu_item.id do
-      "bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium"
-    else
-      "text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-    end
-  end
-
-  defp get_mobile_item_class(menu_item, current_menu) do
-    if current_menu == menu_item.id do
-      "bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium"
-    else
-      "text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-    end
-  end
-
-  defp hide_profile_menu(js \\ %JS{}) do
-    js
-    |> JS.hide(
-      to: "#profile-menu",
-      transition: {
-        "transition ease-in duration-75",
-        "opacity-100 scale-100",
-        "opacity-0 scale-95"
-      }
-    )
-  end
-
-  defp toggle_profile_menu(js \\ %JS{}) do
-    js
-    |> JS.toggle(
-      to: "#profile-menu",
-      in: {
-        "transition ease-out duration-100",
-        "opacity-0 scale-95",
-        "opacity-100 scale-100"
-      },
-      out: {
-        "transition ease-in duration-75",
-        "opacity-100 scale-100",
-        "opacity-0 scale-95"
-      }
-    )
-  end
-
-  defp on_remove(js \\ %JS{}) do
-    js
-    |> JS.hide(to: "#page-main", transition: "fade-out", time: 75)
-    |> JS.hide(to: "#page-title", transition: "fade-out", time: 75)
   end
 
   def wrapper(assigns) do
@@ -231,5 +213,56 @@ defmodule MyAppWeb.Page do
       </main>
     </div>
     """
+  end
+
+  defp get_item_class(menu_item, current_menu) do
+    if current_menu == menu_item.id do
+      "bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium"
+    else
+      "text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+    end
+  end
+
+  defp get_mobile_item_class(menu_item, current_menu) do
+    if current_menu == menu_item.id do
+      "bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium"
+    else
+      "text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+    end
+  end
+
+  defp hide_profile_menu(js \\ %JS{}) do
+    js
+    |> JS.hide(
+      to: "#profile-menu",
+      transition: {
+        "transition ease-in duration-75",
+        "opacity-100 scale-100",
+        "opacity-0 scale-95"
+      }
+    )
+  end
+
+  defp toggle_profile_menu(js \\ %JS{}) do
+    js
+    |> JS.toggle(
+      to: "#profile-menu",
+      in: {
+        "transition ease-out duration-100",
+        "opacity-0 scale-95",
+        "opacity-100 scale-100"
+      },
+      out: {
+        "transition ease-in duration-75",
+        "opacity-100 scale-100",
+        "opacity-0 scale-95"
+      }
+    )
+  end
+
+  defp on_remove(js \\ %JS{}) do
+    js
+    |> JS.hide(to: "#page-main", transition: "fade-out", time: 75)
+    |> JS.hide(to: "#page-title", transition: "fade-out", time: 75)
   end
 end

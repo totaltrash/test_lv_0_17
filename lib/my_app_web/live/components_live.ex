@@ -338,30 +338,6 @@ defmodule MyAppWeb.ComponentsLive do
     """
   end
 
-  defp h1(assigns) do
-    assigns = assign_new(assigns, :label, fn -> nil end)
-
-    ~H"""
-    <h1 class="text-2xl font-medium mb-2"><%= @label || render_slot(@inner_block) %></h1>
-    """
-  end
-
-  defp h2(assigns) do
-    assigns = assign_new(assigns, :label, fn -> nil end)
-
-    ~H"""
-    <h2 class="text-lg font-medium text-gray-500 mb-2"><%= @label || render_slot(@inner_block) %></h2>
-    """
-  end
-
-  defp components_container(assigns) do
-    ~H"""
-    <div class="flex flex-wrap items-center gap-4 mb-8">
-      <%= render_slot(@inner_block) %>
-    </div>
-    """
-  end
-
   def handle_params(params, _url, socket) do
     {:noreply, apply_action(socket, params, socket.assigns.live_action)}
   end

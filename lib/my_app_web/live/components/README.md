@@ -1,6 +1,26 @@
 Components
 ==========
 
+WIP - todo
+----------
+
+Finish handling all assigns passed to clearable_text_input, as per Surface version
+
+Finish ResourceDataTable, add active checkbox, events handlers etc
+
+Check event handlers (change page etc) don't leak/collide. We have to be able to handle multiple data tables embedded in one live view
+
+ResourceDataTable:
+
+* Rename
+* Implement sort
+* Implement session
+* Action buttons?
+* Pagination default slot
+* Document all assigns, including slots. Ensure all are working as expected
+* Look for disabled assigns and remove/implement
+
+
 Issues
 ------
 
@@ -10,9 +30,16 @@ Lots of duplication in Button.button:
   * assigning defaults
   * rendering content within the button or a
 
+.format_datetime is duplicated on components_live and timestamps_live - MOVED TO Page module... for now along with .h1, .h2 and .components_container. Not sure where all this should end up?
+
+Table
+
+  * Background classes applied, leave to the parent to define?
+
 Paginator
 
   * Some wrapper classes applied (top border, white background). This should be left to the parent to define?
+  * change_page_target is necessary for when the paginator is used by components... but should the change_page assign be able to accept a tuple `{@myself, "change_page"}` as well as just an event name for when used by live views?
 
 Clearable text input
 

@@ -1,6 +1,8 @@
 defmodule MyApp.Calendar.Event do
   use Ash.Resource, data_layer: AshPostgres.DataLayer
 
+  alias MyApp.Calendar.Event.Preparations
+
   postgres do
     table("calendar_event")
     repo(MyApp.Repo)
@@ -21,13 +23,23 @@ defmodule MyApp.Calendar.Event do
     update_timestamp :updated_date
   end
 
-  # actions do
-  #   create :primary_create do
-  #     primary?(true)
-  #   end
+  actions do
+    read :data_table do
+      pagination(offset?: true, countable: true)
 
-  #   read :read do
-  #     primary?(true)
-  #   end
-  # end
+      argument(:filter, :map, allow_nil?: true, default: %{keyword: "", active: true})
+
+      # prepare(build(load: [:full_name]))
+      prepare(Preparations.Filter)
+      # prepare(build(sort: [surname: :asc, first_name: :asc]))
+    end
+
+    #   create :primary_create do
+    #     primary?(true)
+    #   end
+
+    #   read :read do
+    #     primary?(true)
+    #   end
+  end
 end

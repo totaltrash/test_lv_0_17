@@ -3,6 +3,7 @@ defmodule MyApp.Accounts.Session do
 
   attributes do
     uuid_primary_key(:id)
+    attribute(:value, :map, default: %{})
     create_timestamp(:created_date)
     update_timestamp(:updated_date)
   end
