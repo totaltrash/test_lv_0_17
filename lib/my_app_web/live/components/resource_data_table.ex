@@ -12,6 +12,8 @@ defmodule MyAppWeb.ResourceDataTable do
   end
 
   def update(assigns, socket) do
+    IO.inspect("UPDATE CALLED")
+
     socket =
       socket
       |> assign(assigns)
@@ -58,38 +60,50 @@ defmodule MyAppWeb.ResourceDataTable do
     assign(socket, applied_sort: nil)
   end
 
-  defp assign_sort_plugin(%{assigns: %{sort: [sort_slot | _]}} = socket) do
-    assign(socket, applied_sort: sort_slot.sort, applied_sort_index: 0)
+  defp assign_sort_plugin(%{assigns: %{sort: [first_sort_slot | _] = sort_slots}} = socket) do
+    sort_options =
+      sort_slots
+      |> Enum.with_index()
+      |> Enum.map(fn {sort_slot, index} -> {sort_slot.label, index} end)
+
+    socket
+    |> assign(applied_sort: first_sort_slot.sort)
+    |> assign(applied_sort_index: 0)
+    |> assign(sort_select_options: sort_options)
   end
 
   def render(assigns) do
     ~H"""
     <div class={@class}>
-      <%= if @filter do %>
-        <.form
-          let={form}
-          for={:filter}
-          phx-change="filter"
-          phx-submit="filter"
-          phx-target={@myself}
-          class="py-2 px-5 bg-white flex flex-col sm:flex-row sm:items-center gap-6"
-        >
-          <%= for filter <- @filter do %>
-            <.filter_control filter={filter} form={form} value={@applied_filter[filter.field]} />
+      <%= if @filter || @sort do %>
+        <div class="py-2 px-5 bg-white flex flex-col sm:flex-row sm:items-center gap-6">
+          <%= if @filter do %>
+            <.form
+              let={form}
+              for={:filter}
+              phx-change="filter"
+              phx-submit="filter"
+              phx-target={@myself}
+              class="flex flex-col sm:flex-row sm:items-center gap-6"
+            >
+              <%= for filter <- @filter do %>
+                <.filter_control filter={filter} form={form} value={@applied_filter[filter.field]} />
+              <% end %>
+            </.form>
           <% end %>
-        </.form>
-      <% end %>
-      <%= if @sort do %>
-        <.form
-          let={form}
-          for={:sort}
-          phx-change="sort"
-          phx-submit="sort"
-          phx-target={@myself}
-          class="py-2 px-5 bg-white flex flex-col sm:flex-row sm:items-center gap-6"
-        >
-          <%= select form, :sort, Enum.map(Enum.with_index(@sort), fn {sort_item, index} -> {sort_item.label, index} end), value: @applied_sort_index %>
-        </.form>
+          <%= if @sort do %>
+            <.form
+              let={form}
+              for={:sort}
+              phx-change="sort"
+              phx-submit="sort"
+              phx-target={@myself}
+              class="w-64"
+            >
+              <%= select form, :sort, @sort_select_options, value: @applied_sort_index %>
+            </.form>
+          <% end %>
+        </div>
       <% end %>
       <%= render_slot(@inner_block, @results) %>
       <%= if @pagination do %>
@@ -132,10 +146,11 @@ defmodule MyAppWeb.ResourceDataTable do
   defp assign_results(%{assigns: %{pagination: nil}} = socket) do
     results =
       socket.assigns.resource
-      |> Ash.Query.new()
-      |> add_filter(socket.assigns.applied_filter)
-      |> add_sort(socket.assigns.applied_sort)
-      |> Ash.Query.for_read(socket.assigns.action)
+      |> build_query(
+        socket.assigns.applied_filter,
+        socket.assigns.applied_sort,
+        socket.assigns.action
+      )
       |> socket.assigns.api.read!()
 
     assign(socket, results: results)
@@ -150,14 +165,23 @@ defmodule MyAppWeb.ResourceDataTable do
 
     {page, results} =
       socket.assigns.resource
-      |> Ash.Query.new()
-      |> add_filter(socket.assigns.applied_filter)
-      |> add_sort(socket.assigns.applied_sort)
-      |> Ash.Query.for_read(socket.assigns.action)
+      |> build_query(
+        socket.assigns.applied_filter,
+        socket.assigns.applied_sort,
+        socket.assigns.action
+      )
       |> socket.assigns.api.read!(page: [limit: page_size, count: true, offset: offset])
       |> extract_results()
 
     assign(socket, page: page, results: results)
+  end
+
+  defp build_query(resource, filter, sort, action) do
+    resource
+    |> Ash.Query.new()
+    |> add_filter(filter)
+    |> add_sort(sort)
+    |> Ash.Query.for_read(action)
   end
 
   defp add_filter(query, nil), do: query

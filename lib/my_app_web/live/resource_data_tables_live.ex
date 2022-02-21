@@ -54,7 +54,7 @@ defmodule MyAppWeb.ResourceDataTablesLive do
         <:pagination />
       </.live_component>
 
-      <.h1>Filter and Pagination</.h1>
+      <.h1>The Lot</.h1>
       <.live_component
         module={MyAppWeb.ResourceDataTable}
         id="filter_events_table"
@@ -83,7 +83,7 @@ defmodule MyAppWeb.ResourceDataTablesLive do
         <:sort label="Start time Asc" sort={[start_on: :asc]} />
         <:sort label="Start time Desc" sort={[start_on: :desc]} />
 
-        <:pagination page_size={10} />
+        <:pagination page_size={1} />
 
         <:session key="some_key" id={@session_id} />
       </.live_component>
