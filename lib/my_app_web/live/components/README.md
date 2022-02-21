@@ -13,13 +13,9 @@ Check event handlers (change page etc) don't leak/collide. We have to be able to
 ResourceDataTable:
 
 * Finish filter:
-  - assign default filter map on mount (built from each filter slot element initial assign)
   - implement filter reset (assigns default filter map to filter map)
-* Implement sort
 * Implement session
 * Toolbar/buttons?
-* Play with temporary assigning results (copy out of page, remove results from page)
-* Pagination default slot
 * Document all assigns, including slots. Ensure all are working as expected
 * Look for disabled assigns and remove/implement
 * Rename
@@ -44,10 +40,6 @@ Paginator
 
   * Some wrapper classes applied (top border, white background). This should be left to the parent to define?
   * change_page_target is necessary for when the paginator is used by components... but should the change_page assign be able to accept a tuple `{@myself, "change_page"}` as well as just an event name for when used by live views?
-
-Clearable text input
-
-  * See comments
 
 Sizes
 -----

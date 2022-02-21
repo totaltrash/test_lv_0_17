@@ -12,7 +12,7 @@ defmodule MyAppWeb.ResourceDataTable do
   end
 
   def update(assigns, socket) do
-    IO.inspect("UPDATE CALLED")
+    # IO.inspect("UPDATE CALLED")
 
     socket =
       socket
@@ -25,12 +25,16 @@ defmodule MyAppWeb.ResourceDataTable do
       |> assign_new(:pagination, fn -> nil end)
       |> assign_new(:filter, fn -> nil end)
       |> assign_new(:sort, fn -> nil end)
+      |> assign_new(:session, fn -> nil end)
 
       # assign plugins
       |> assign_filter_plugin()
       |> assign_sort_plugin()
+      |> assign_session_plugin()
 
-      # |> assign_session_keys()
+      # assign the results
+      |> assign_results()
+      |> assign_session_plugin()
 
       # assign the results
       |> assign_results()
@@ -72,6 +76,18 @@ defmodule MyAppWeb.ResourceDataTable do
     |> assign(sort_select_options: sort_options)
   end
 
+  defp assign_session_plugin(%{assigns: %{session: nil}} = socket) do
+    socket
+  end
+
+  defp assign_session_plugin(%{assigns: %{session: [session | _]}} = socket) do
+    socket
+    |> assign(session_id: session.id)
+    |> assign(session_key_filter: String.to_atom(session.key <> "_filter"))
+    |> assign(session_key_sort: String.to_atom(session.key <> "_sort"))
+    |> assign(session_key_page: String.to_atom(session.key <> "_page"))
+  end
+
   def render(assigns) do
     ~H"""
     <div class={@class}>
@@ -79,6 +95,7 @@ defmodule MyAppWeb.ResourceDataTable do
         <div class="py-2 px-5 bg-white flex flex-col sm:flex-row sm:items-center gap-6">
           <%= if @filter do %>
             <.form
+              id={"#{@id}_filter_form"}
               let={form}
               for={:filter}
               phx-change="filter"
@@ -87,12 +104,18 @@ defmodule MyAppWeb.ResourceDataTable do
               class="flex flex-col sm:flex-row sm:items-center gap-6"
             >
               <%= for filter <- @filter do %>
-                <.filter_control filter={filter} form={form} value={@applied_filter[filter.field]} />
+                <.filter_control
+                  filter={filter}
+                  form={form}
+                  value={@applied_filter[filter.field]}
+                  myself={@myself}
+                />
               <% end %>
             </.form>
           <% end %>
           <%= if @sort do %>
             <.form
+              id={"#{@id}_sort_form"}
               let={form}
               for={:sort}
               phx-change="sort"
@@ -126,6 +149,8 @@ defmodule MyAppWeb.ResourceDataTable do
         form={@form}
         field={@filter.field}
         value={@value}
+        clear="clear_text_input"
+        clear_target={@myself}
         ZZZclass="w-full sm:w-64 pr-10 sm:flex-shrink"
       />
     """
@@ -186,14 +211,14 @@ defmodule MyAppWeb.ResourceDataTable do
 
   defp add_filter(query, nil), do: query
 
-  defp add_filter(query, applied_filter) do
-    Ash.Query.set_argument(query, :filter, applied_filter)
+  defp add_filter(query, filter) do
+    Ash.Query.set_argument(query, :filter, filter)
   end
 
   defp add_sort(query, nil), do: query
 
-  defp add_sort(query, applied_sort) do
-    Ash.Query.sort(query, applied_sort)
+  defp add_sort(query, sort) do
+    Ash.Query.sort(query, sort)
   end
 
   def handle_event("change_page", %{"page" => page_no}, socket) do
@@ -233,6 +258,16 @@ defmodule MyAppWeb.ResourceDataTable do
       |> assign(applied_sort: sort)
       |> assign(applied_sort_index: sort_index)
       |> assign_results()
+
+    {:noreply, socket}
+  end
+
+  def handle_event("clear_text_input", params, socket) do
+    IO.inspect(params)
+    # socket =
+    #   socket
+    #   |> assign(applied_filter: applied_filter)
+    #   |> assign_results()
 
     {:noreply, socket}
   end

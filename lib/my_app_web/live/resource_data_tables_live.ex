@@ -54,7 +54,7 @@ defmodule MyAppWeb.ResourceDataTablesLive do
         <:pagination />
       </.live_component>
 
-      <.h1>The Lot</.h1>
+      <.h1>Filter</.h1>
       <.live_component
         module={MyAppWeb.ResourceDataTable}
         id="filter_events_table"
@@ -74,6 +74,53 @@ defmodule MyAppWeb.ResourceDataTablesLive do
 
         <:filter field={:keyword} type="text" placeholder="Filter" />
         <:filter field={:active} type="checkbox" default={true} label="Active?" />
+      </.live_component>
+
+      <.h1>Sort</.h1>
+      <.live_component
+        module={MyAppWeb.ResourceDataTable}
+        id="sort_events_table"
+        api={MyApp.Calendar}
+        resource={MyApp.Calendar.Event}
+        let={items}
+        class="mb-8"
+      >
+        <.data_table items={items}>
+          <:col let={item} label="Start Time" th_class="w-1/4">
+            <.format_datetime datetime={item.start_on} />
+          </:col>
+          <:col let={item} label="Title">
+            <%= item.title %>
+          </:col>
+        </.data_table>
+
+        <:sort label="Title Asc" sort={[title: :asc]} />
+        <:sort label="Title Desc" sort={[title: :desc]} />
+        <:sort label="Start time Asc" sort={[start_on: :asc]} />
+        <:sort label="Start time Desc" sort={[start_on: :desc]} />
+      </.live_component>
+
+      <.h1>The Lot</.h1>
+      <.live_component
+        module={MyAppWeb.ResourceDataTable}
+        id="the_lot_events_table"
+        api={MyApp.Calendar}
+        resource={MyApp.Calendar.Event}
+        let={items}
+        class="mb-8"
+      >
+        <.data_table items={items}>
+          <:col let={item} label="Start Time" th_class="w-1/4">
+            <.format_datetime datetime={item.start_on} />
+          </:col>
+          <:col let={item} label="Title">
+            <%= item.title %>
+          </:col>
+        </.data_table>
+
+        <:filter field={:keyword} type="text" placeholder="Filter" />
+        <:filter field={:other} type="text" placeholder="Filter" />
+        <:filter field={:active} type="checkbox" default={true} label="Active?" />
         <:filter field={:some_custom} type="custom" let={ctx} normalize="integer">
           <%= number_input ctx.form, ctx.field, value: ctx.value, autocomplete: "off", class: "w-64" %>
         </:filter>
@@ -85,7 +132,7 @@ defmodule MyAppWeb.ResourceDataTablesLive do
 
         <:pagination page_size={1} />
 
-        <:session key="some_key" id={@session_id} />
+        <:session key="resource_data_table_the_lot" id={@session_id} />
       </.live_component>
     </.wrapper>
     """

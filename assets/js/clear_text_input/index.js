@@ -2,10 +2,16 @@
 const ClearTextInput = {
   mounted() {
     this.el.addEventListener('click', (evt) => {
-      this.el
+      let input = this.el
         .closest('[data-role="clearable-text-input-container"]')
         .getElementsByTagName('input')[0]
-        .value = ''
+      
+      input.value = ''
+
+      // dispatch an input event to trigger a phx-change on the containing form
+      input.dispatchEvent(
+        new Event("input", {bubbles: true})
+      )
     })
   }
 }
