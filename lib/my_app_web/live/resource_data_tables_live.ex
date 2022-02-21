@@ -3,8 +3,8 @@ defmodule MyAppWeb.ResourceDataTablesLive do
 
   import MyAppWeb.Page
   import MyAppWeb.Table
-  import MyAppWeb.Form
-  import MyAppWeb.ResourceDataTable.Components
+  # import MyAppWeb.Form
+  # import MyAppWeb.ResourceDataTable.Components
 
   # def mount(_params, _session, socket) do
   #   socket = assign(socket, :messages, load_some_messages(socket))
@@ -71,16 +71,21 @@ defmodule MyAppWeb.ResourceDataTablesLive do
             <%= item.title %>
           </:col>
         </.data_table>
-        <:filter field={:keyword} type="text" initial="" placeholder="Filter" />
-        <:filter field={:active} type="checkbox" initial={true} label="Active?" />
-        <:filter let={ctx} field={:some_custom} type="custom" normalize="integer">
-          <%= number_input ctx.form, ctx.field, value: ctx.value, class: "w-64" %>
+
+        <:filter field={:keyword} type="text" placeholder="Filter" />
+        <:filter field={:active} type="checkbox" default={true} label="Active?" />
+        <:filter field={:some_custom} type="custom" let={ctx} normalize="integer">
+          <%= number_input ctx.form, ctx.field, value: ctx.value, autocomplete: "off", class: "w-64" %>
         </:filter>
-        <:pagination page_size={1} let={ctx} empty_message="No events found">
-          Showing <%= ctx.start %> to <%= ctx.end %> of <%= ctx.total %> events
-        </:pagination>
+
+        <:sort label="Title Asc" sort={[title: :asc]} />
+        <:sort label="Title Desc" sort={[title: :desc]} />
+        <:sort label="Start time Asc" sort={[start_on: :asc]} />
+        <:sort label="Start time Desc" sort={[start_on: :desc]} />
+
+        <:pagination page_size={10} />
+
         <:session key="some_key" id={@session_id} />
-        <:sort />
       </.live_component>
     </.wrapper>
     """

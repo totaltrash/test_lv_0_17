@@ -8,38 +8,61 @@ defmodule MyAppWeb.ResourceDataTable do
   @default_pagination_page_size 10
 
   def mount(socket) do
-    socket =
-      socket
-      |> assign_new(:class, fn -> nil end)
-      |> assign_new(:filter, fn -> nil end)
-      |> assign_new(:pagination, fn -> nil end)
-      # |> assign_new(:page_size, fn -> 10 end)
-      |> assign_new(:action, fn -> :data_table end)
-
-    # |> assign_plugin_config()
-    # |> assign_pagination_plugin()
-
-    # |> assign_filter_map_plugin()
-    # |> assign_sort_plugin()
-    # |> assign_session_plugin()
-
-    {:ok, socket}
+    {:ok, socket, temporary_assigns: [results: nil]}
   end
 
   def update(assigns, socket) do
     socket =
       socket
       |> assign(assigns)
+      # Default values for optional assigns
+      |> assign_new(:class, fn -> nil end)
+      |> assign_new(:action, fn -> :data_table end)
+
+      # Default optional slots
+      |> assign_new(:pagination, fn -> nil end)
+      |> assign_new(:filter, fn -> nil end)
+      |> assign_new(:sort, fn -> nil end)
+
+      # assign plugins
+      |> assign_filter_plugin()
+      |> assign_sort_plugin()
+
       # |> assign_session_keys()
-      |> assign_filter_map()
+
+      # assign the results
       |> assign_results()
 
     {:ok, socket}
   end
 
-  def render(assigns) do
-    # IO.inspect(assigns)
+  defp assign_filter_plugin(%{assigns: %{filter: nil}} = socket) do
+    assign(socket, applied_filter: nil)
+  end
 
+  defp assign_filter_plugin(%{assigns: %{filter: filter_slots}} = socket) do
+    applied_filter =
+      Map.new(filter_slots, fn filter_slot ->
+        {filter_slot.field, filter_default(filter_slot)}
+      end)
+
+    assign(socket, applied_filter: applied_filter)
+  end
+
+  defp filter_default(%{default: default}), do: default
+  defp filter_default(%{type: "checkbox"}), do: false
+  defp filter_default(%{type: "text"}), do: ""
+  defp filter_default(_), do: nil
+
+  defp assign_sort_plugin(%{assigns: %{sort: nil}} = socket) do
+    assign(socket, applied_sort: nil)
+  end
+
+  defp assign_sort_plugin(%{assigns: %{sort: [sort_slot | _]}} = socket) do
+    assign(socket, applied_sort: sort_slot.sort, applied_sort_index: 0)
+  end
+
+  def render(assigns) do
     ~H"""
     <div class={@class}>
       <%= if @filter do %>
@@ -52,12 +75,24 @@ defmodule MyAppWeb.ResourceDataTable do
           class="py-2 px-5 bg-white flex flex-col sm:flex-row sm:items-center gap-6"
         >
           <%= for filter <- @filter do %>
-            <.filter_control filter={filter} form={form} value={@filter_map[filter.field]} />
+            <.filter_control filter={filter} form={form} value={@applied_filter[filter.field]} />
           <% end %>
         </.form>
       <% end %>
+      <%= if @sort do %>
+        <.form
+          let={form}
+          for={:sort}
+          phx-change="sort"
+          phx-submit="sort"
+          phx-target={@myself}
+          class="py-2 px-5 bg-white flex flex-col sm:flex-row sm:items-center gap-6"
+        >
+          <%= select form, :sort, Enum.map(Enum.with_index(@sort), fn {sort_item, index} -> {sort_item.label, index} end), value: @applied_sort_index %>
+        </.form>
+      <% end %>
+      <%= render_slot(@inner_block, @results) %>
       <%= if @pagination do %>
-        <%= render_slot(@inner_block, @page.results) %>
         <.paginator
           offset={@page.offset}
           limit={@page.limit}
@@ -66,8 +101,6 @@ defmodule MyAppWeb.ResourceDataTable do
           change_page="change_page"
           change_page_target={@myself}
         />
-      <% else %>
-        <%= render_slot(@inner_block, @results) %>
       <% end %>
     </div>
     """
@@ -99,7 +132,10 @@ defmodule MyAppWeb.ResourceDataTable do
   defp assign_results(%{assigns: %{pagination: nil}} = socket) do
     results =
       socket.assigns.resource
-      |> Ash.Query.for_read(socket.assigns.action, filter: socket.assigns.filter_map)
+      |> Ash.Query.new()
+      |> add_filter(socket.assigns.applied_filter)
+      |> add_sort(socket.assigns.applied_sort)
+      |> Ash.Query.for_read(socket.assigns.action)
       |> socket.assigns.api.read!()
 
     assign(socket, results: results)
@@ -112,71 +148,79 @@ defmodule MyAppWeb.ResourceDataTable do
     page_size = pagination[:page_size] || @default_pagination_page_size
     offset = (page_no - 1) * page_size
 
-    page =
+    {page, results} =
       socket.assigns.resource
-      |> Ash.Query.for_read(socket.assigns.action, filter: socket.assigns.filter_map)
+      |> Ash.Query.new()
+      |> add_filter(socket.assigns.applied_filter)
+      |> add_sort(socket.assigns.applied_sort)
+      |> Ash.Query.for_read(socket.assigns.action)
       |> socket.assigns.api.read!(page: [limit: page_size, count: true, offset: offset])
+      |> extract_results()
 
-    assign(socket, page: page)
+    assign(socket, page: page, results: results)
   end
 
-  # ### IS THIS THE CORRECT GUARD???
-  # defp assign_filter_map(%{assigns: %{filter: filter}} = socket) when is_list(filter) do
-  #   # IO.inspect(socket.assigns.filter)
-  #   # filter_map =
-  #   #   Session.get(
-  #   #     socket.assigns.session_id,
-  #   #     socket.assigns.session_key_filter,
-  #   #     %{keyword: "", active: true}
-  #   #   )
-  #   filter_map = hd(socket.assigns.filter).initial_filter
+  defp add_filter(query, nil), do: query
 
-  #   assign(socket, filter_map: filter_map)
-  # end
-
-  # ### DEFAULT THIS IN MOUNT?
-  defp assign_filter_map(socket) do
-    IO.puts("HERE!!!")
-    assign(socket, filter_map: %{})
+  defp add_filter(query, applied_filter) do
+    Ash.Query.set_argument(query, :filter, applied_filter)
   end
 
-  defp assign_filter_map(socket, filter_map) do
-    assign(socket, filter_map: filter_map)
+  defp add_sort(query, nil), do: query
+
+  defp add_sort(query, applied_sort) do
+    Ash.Query.sort(query, applied_sort)
   end
 
   def handle_event("change_page", %{"page" => page_no}, socket) do
     page_no = String.to_integer(page_no)
+
+    {page, results} =
+      socket.assigns.page
+      |> socket.assigns.api.page!(page_no)
+      |> extract_results()
+
     # Session.set(socket.assigns.session_id, socket.assigns.session_key_page, page_no)
 
-    {:noreply, assign(socket, page: socket.assigns.api.page!(socket.assigns.page, page_no))}
+    {:noreply, assign(socket, page: page, results: results)}
   end
 
   def handle_event("filter", %{"filter" => filter}, socket) do
-    # %{"keyword" => keyword, "active" => active} = filter
-
-    # filter = %{
-    #   keyword: keyword,
-    #   active: String.to_existing_atom(active)
-    # }
-
-    # filter =
-    #   filter
-    #   |> Jason.encode!()
-    #   |> Jason.decode!(keys: :atoms)
-
-    filter = normalize_filter_map(filter, socket.assigns.filter)
-    IO.inspect(filter)
+    filter = normalize_filter_params(filter, socket.assigns.filter)
 
     socket =
       socket
-      |> assign_filter_map(filter)
+      |> assign(applied_filter: filter)
       |> assign_results()
 
     {:noreply, socket}
   end
 
-  defp normalize_filter_map(filter_map, filter_configs) do
-    filter_map
+  def handle_event("sort", %{"sort" => sort}, socket) do
+    sort_index = String.to_integer(sort["sort"])
+
+    sort =
+      socket.assigns.sort
+      |> Enum.at(sort_index, %{})
+      |> Map.get(:sort)
+
+    socket =
+      socket
+      |> assign(applied_sort: sort)
+      |> assign(applied_sort_index: sort_index)
+      |> assign_results()
+
+    {:noreply, socket}
+  end
+
+  defp extract_results(page) do
+    results = page.results
+    page = Map.put(page, :results, [])
+    {page, results}
+  end
+
+  defp normalize_filter_params(applied_filter, filter_configs) do
+    applied_filter
     |> Map.new(fn {key, value} ->
       key = String.to_atom(key)
 

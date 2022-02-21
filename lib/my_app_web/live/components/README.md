@@ -12,13 +12,17 @@ Check event handlers (change page etc) don't leak/collide. We have to be able to
 
 ResourceDataTable:
 
-* Rename
+* Finish filter:
+  - assign default filter map on mount (built from each filter slot element initial assign)
+  - implement filter reset (assigns default filter map to filter map)
 * Implement sort
 * Implement session
-* Action buttons?
+* Toolbar/buttons?
+* Play with temporary assigning results (copy out of page, remove results from page)
 * Pagination default slot
 * Document all assigns, including slots. Ensure all are working as expected
 * Look for disabled assigns and remove/implement
+* Rename
 
 
 Issues
