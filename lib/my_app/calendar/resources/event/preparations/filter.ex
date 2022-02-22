@@ -20,9 +20,9 @@ defmodule MyApp.Calendar.Event.Preparations.Filter do
     {keyword, active}
   end
 
-  defp normalize_filter(%{"keyword" => keyword, "active" => active}) do
-    {keyword, String.to_existing_atom(active)}
-  end
+  # defp normalize_filter(%{"keyword" => keyword, "active" => active}) do
+  #   {keyword, String.to_existing_atom(active)}
+  # end
 
   defp normalize_filter(_), do: {"", true}
 

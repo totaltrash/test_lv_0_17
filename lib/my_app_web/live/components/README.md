@@ -30,6 +30,8 @@ Lots of duplication in Button.button:
   * assigning defaults
   * rendering content within the button or a
 
+Session keys: atoms or strings? Atoms at mo, but what's the point? Lots of converting strings to atoms just to store a session value?
+
 .format_datetime is duplicated on components_live and timestamps_live - MOVED TO Page module... for now along with .h1, .h2 and .components_container. Not sure where all this should end up?
 
 Table

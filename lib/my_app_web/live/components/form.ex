@@ -12,9 +12,22 @@ defmodule MyAppWeb.Form do
   end
 
   def clearable_text_input(assigns) do
+    extra_attributes =
+      assigns_to_attributes(assigns, [
+        :form,
+        :field,
+        :value,
+        :class
+      ])
+
+    assigns =
+      assigns
+      |> assign_new(:class, fn -> nil end)
+      |> assign(extra_attributes: extra_attributes)
+
     ~H"""
     <div data-role="clearable-text-input-container" class="relative">
-      <%= text_input @form, @field, value: @value, autocomplete: "off" %>
+      <%= text_input @form, @field, [value: @value, autocomplete: "off", class: @class] ++ @extra_attributes %>
       <span class="absolute inset-y-0 flex items-center right-0 pr-2">
         <%= if @value != "" do %>
           <button

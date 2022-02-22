@@ -119,7 +119,7 @@ defmodule MyAppWeb.ResourceDataTablesLive do
         </.data_table>
 
         <:filter field={:keyword} type="text" placeholder="Filter" />
-        <:filter field={:other} type="text" placeholder="Filter" />
+        <:filter field={:other} type="text" placeholder="Other" label="Label" />
         <:filter field={:active} type="checkbox" default={true} label="Active?" />
         <:filter field={:some_custom} type="custom" let={ctx} normalize="integer">
           <%= number_input ctx.form, ctx.field, value: ctx.value, autocomplete: "off", class: "w-64" %>
@@ -137,24 +137,4 @@ defmodule MyAppWeb.ResourceDataTablesLive do
     </.wrapper>
     """
   end
-
-  # <.live_component
-  #   module={MyAppWeb.ResourceDataTable}
-  #   id="events_data_table"
-  #   session_key="contact_index"
-  #   session_id={@session_id}
-  #   api={MyApp.Calendar}
-  #   resource={MyApp.Calendar.Event}
-  #   let={items}
-  #   page_size={10}
-  # >
-  #   <.data_table items={items}>
-  #     <:col let={item} label="Start Time" th_class="w-1/4">
-  #       <.format_datetime datetime={item.start_on} />
-  #     </:col>
-  #     <:col let={item} label="Title">
-  #       <%= item.title %>
-  #     </:col>
-  #   </.data_table>
-  # </.live_component>
 end

@@ -1,7 +1,7 @@
 defmodule MyAppWeb.ResourceDataTable do
   use MyAppWeb, :live_component
 
-  # alias MyAppWeb.Session
+  alias MyAppWeb.Session
   import MyAppWeb.Paginator
   import MyAppWeb.Form
 
@@ -12,7 +12,7 @@ defmodule MyAppWeb.ResourceDataTable do
   end
 
   def update(assigns, socket) do
-    # IO.inspect("UPDATE CALLED")
+    IO.inspect("UPDATE CALLED")
 
     socket =
       socket
@@ -30,6 +30,7 @@ defmodule MyAppWeb.ResourceDataTable do
       # assign plugins
       |> assign_filter_plugin()
       |> assign_sort_plugin()
+      |> assign_pagination_plugin()
       |> assign_session_plugin()
 
       # assign the results
@@ -42,15 +43,29 @@ defmodule MyAppWeb.ResourceDataTable do
     {:ok, socket}
   end
 
+  defp assign_pagination_plugin(%{assigns: %{pagination: nil}} = socket) do
+    socket
+  end
+
+  defp assign_pagination_plugin(%{assigns: %{pagination: [pagination_slot | _]}} = socket) do
+    page_no = get_session(socket.assigns.session, :page, 1)
+    page_size = pagination_slot[:page_size] || @default_pagination_page_size
+
+    socket
+    |> assign(page_no: page_no)
+    |> assign(page_size: page_size)
+  end
+
   defp assign_filter_plugin(%{assigns: %{filter: nil}} = socket) do
     assign(socket, applied_filter: nil)
   end
 
   defp assign_filter_plugin(%{assigns: %{filter: filter_slots}} = socket) do
     applied_filter =
-      Map.new(filter_slots, fn filter_slot ->
-        {filter_slot.field, filter_default(filter_slot)}
-      end)
+      get_session(socket.assigns.session, :filter, nil) ||
+        Map.new(filter_slots, fn filter_slot ->
+          {filter_slot.field, filter_default(filter_slot)}
+        end)
 
     assign(socket, applied_filter: applied_filter)
   end
@@ -64,16 +79,19 @@ defmodule MyAppWeb.ResourceDataTable do
     assign(socket, applied_sort: nil)
   end
 
-  defp assign_sort_plugin(%{assigns: %{sort: [first_sort_slot | _] = sort_slots}} = socket) do
+  defp assign_sort_plugin(%{assigns: %{sort: sort_slots}} = socket) do
     sort_options =
       sort_slots
       |> Enum.with_index()
       |> Enum.map(fn {sort_slot, index} -> {sort_slot.label, index} end)
 
+    sort_index = get_session(socket.assigns.session, :sort, 0)
+    sort_slot = Enum.at(sort_slots, sort_index, %{})
+
     socket
-    |> assign(applied_sort: first_sort_slot.sort)
-    |> assign(applied_sort_index: 0)
     |> assign(sort_select_options: sort_options)
+    |> assign(applied_sort_index: sort_index)
+    |> assign(applied_sort: sort_slot[:sort])
   end
 
   defp assign_session_plugin(%{assigns: %{session: nil}} = socket) do
@@ -83,10 +101,21 @@ defmodule MyAppWeb.ResourceDataTable do
   defp assign_session_plugin(%{assigns: %{session: [session | _]}} = socket) do
     socket
     |> assign(session_id: session.id)
-    |> assign(session_key_filter: String.to_atom(session.key <> "_filter"))
-    |> assign(session_key_sort: String.to_atom(session.key <> "_sort"))
-    |> assign(session_key_page: String.to_atom(session.key <> "_page"))
+    |> assign(session_key_filter: session_key(session.key, :filter))
+    |> assign(session_key_sort: session_key(session.key, :sort))
+    |> assign(session_key_page: session_key(session.key, :page))
   end
+
+  defp assign_page_no(%{assigns: %{page_no: _}} = socket, page_no) do
+    set_session(socket.assigns.session, :page, page_no)
+    assign(socket, :page_no, page_no)
+  end
+
+  defp assign_page_no(socket, _page_no), do: socket
+
+  defp session_key(key, :filter), do: String.to_atom(key <> "_filter")
+  defp session_key(key, :sort), do: String.to_atom(key <> "_sort")
+  defp session_key(key, :page), do: String.to_atom(key <> "_page")
 
   def render(assigns) do
     ~H"""
@@ -149,9 +178,7 @@ defmodule MyAppWeb.ResourceDataTable do
         form={@form}
         field={@filter.field}
         value={@value}
-        clear="clear_text_input"
-        clear_target={@myself}
-        ZZZclass="w-full sm:w-64 pr-10 sm:flex-shrink"
+        placeholder={@filter[:placeholder] || nil}
       />
     """
   end
@@ -181,11 +208,9 @@ defmodule MyAppWeb.ResourceDataTable do
     assign(socket, results: results)
   end
 
-  defp assign_results(%{assigns: %{pagination: [pagination | _]}} = socket) do
-    # page_no = Session.get(socket.assigns.session_id, socket.assigns.session_key_page, 1)
-    page_no = 1
-
-    page_size = pagination[:page_size] || @default_pagination_page_size
+  defp assign_results(%{assigns: %{pagination: [_pagination | _]}} = socket) do
+    page_no = socket.assigns.page_no
+    page_size = socket.assigns.page_size
     offset = (page_no - 1) * page_size
 
     {page, results} =
@@ -229,9 +254,9 @@ defmodule MyAppWeb.ResourceDataTable do
       |> socket.assigns.api.page!(page_no)
       |> extract_results()
 
-    # Session.set(socket.assigns.session_id, socket.assigns.session_key_page, page_no)
+    set_session(socket.assigns.session, :page, page_no)
 
-    {:noreply, assign(socket, page: page, results: results)}
+    {:noreply, assign(socket, page: page, page_no: page_no, results: results)}
   end
 
   def handle_event("filter", %{"filter" => filter}, socket) do
@@ -240,7 +265,10 @@ defmodule MyAppWeb.ResourceDataTable do
     socket =
       socket
       |> assign(applied_filter: filter)
+      |> assign_page_no(1)
       |> assign_results()
+
+    set_session(socket.assigns.session, :filter, filter)
 
     {:noreply, socket}
   end
@@ -257,17 +285,10 @@ defmodule MyAppWeb.ResourceDataTable do
       socket
       |> assign(applied_sort: sort)
       |> assign(applied_sort_index: sort_index)
+      |> assign_page_no(1)
       |> assign_results()
 
-    {:noreply, socket}
-  end
-
-  def handle_event("clear_text_input", params, socket) do
-    IO.inspect(params)
-    # socket =
-    #   socket
-    #   |> assign(applied_filter: applied_filter)
-    #   |> assign_results()
+    set_session(socket.assigns.session, :sort, sort_index)
 
     {:noreply, socket}
   end
@@ -309,4 +330,16 @@ defmodule MyAppWeb.ResourceDataTable do
   end
 
   defp normalize_filter_element(_, value), do: value
+
+  defp set_session(nil, _key_type, _value), do: nil
+
+  defp set_session([session_slot | _], key_type, value) do
+    Session.set(session_slot.id, session_key(session_slot.key, key_type), value)
+  end
+
+  defp get_session(nil, _key_type, default), do: default
+
+  defp get_session([session_slot | _], key_type, default) do
+    Session.get(session_slot.id, session_key(session_slot.key, key_type), default)
+  end
 end

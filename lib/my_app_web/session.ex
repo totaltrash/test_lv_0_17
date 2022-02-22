@@ -10,6 +10,8 @@ defmodule MyAppWeb.Session do
   end
 
   def get(session_id, key, default \\ nil) do
+    # IO.puts("Session get called with #{key}")
+
     case get_session_resource(session_id) do
       nil -> default
       session -> Map.get(session.value, key, default)
@@ -17,6 +19,8 @@ defmodule MyAppWeb.Session do
   end
 
   def set(session_id, key, value) do
+    # IO.puts("Session set called with #{key}: #{inspect(value)}")
+
     session =
       case get_session_resource(session_id) do
         nil ->
