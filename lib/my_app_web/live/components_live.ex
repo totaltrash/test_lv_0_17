@@ -12,6 +12,7 @@ defmodule MyAppWeb.ComponentsLive do
   import MyAppWeb.Icon
   import MyAppWeb.Dropdown
   import MyAppWeb.Paginator
+  import MyAppWeb.Tabs
 
   def mount(_, _session, socket) do
     MyAppWeb.Endpoint.subscribe(@topic)
@@ -28,6 +29,45 @@ defmodule MyAppWeb.ComponentsLive do
   def render(assigns) do
     ~H"""
     <.wrapper current_menu="components" title="Components">
+      <.h1>Tabs (Client Side)</.h1>
+      <.components_container>
+        <.tabs id="tabs_test">
+          <:tab label="Tab 1">
+            <.h1>Hello</.h1>
+            <p class="mb-2">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut posuere nisi non enim mollis semper.
+            </p>
+            <p class="mb-2">
+              Aenean convallis lorem a urna fringilla, a ornare mauris convallis. Cras sed arcu condimentum nisi dignissim sollicitudin. Vivamus ac suscipit nulla. Integer viverra sodales semper. Nullam dapibus eros nec lectus blandit blandit.
+            </p>
+            <p>
+              Nam eget rutrum nunc. Proin nec porttitor augue, ut ultricies erat. Donec est enim, iaculis ultricies consectetur sed, sagittis in diam. Fusce sed lacus vel urna imperdiet finibus. Donec aliquam commodo rhoncus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed hendrerit consectetur mollis. Aenean in nisi urna.
+            </p>
+          </:tab>
+          <:tab label="Tab 2">
+            <.h1>Ipsum Facto</.h1>
+            <p class="mb-2">
+              In hac habitasse platea dictumst. Fusce dui diam, dictum nec auctor eget, suscipit eu odio. Nullam bibendum dolor pellentesque est imperdiet pulvinar.
+            </p>
+            <p class="mb-2">
+              Quisque lectus elit, sodales sed facilisis non, gravida ac ligula. Curabitur ultrices justo nec dapibus iaculis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Etiam ac ante tortor. Praesent gravida dui nulla.
+            </p>
+            <p>
+              Sed ac justo a leo commodo consequat nec nec risus. Suspendisse ultricies, massa eu sagittis dapibus, elit lectus vulputate diam, et fermentum lacus velit faucibus tellus. Phasellus fringilla hendrerit ligula, at mollis mauris vehicula quis. Nullam quam erat, dignissim eget ex eu, congue vulputate enim. Phasellus metus libero, egestas ac lacus tincidunt, hendrerit pulvinar augue.
+            </p>
+          </:tab>
+          <:tab label="Tab 3">
+            <.h1>Monkey See, Monkey Do</.h1>
+            <p class="mb-2">
+              In facilisis justo vitae tempus elementum. Fusce sodales dolor non nibh tempor, quis dignissim eros porttitor. Mauris pretium enim eros, eget pharetra augue vehicula eget. Suspendisse nec nibh commodo, ultrices ipsum nec, pretium nisl. Duis quam elit, imperdiet et auctor a, lobortis nec ligula.
+            </p>
+            <p class="mb-2">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            </p>
+          </:tab>
+        </.tabs>
+      </.components_container>
+
       <.h1>Paginator</.h1>
       <.components_container>
         <.paginator offset={@paginator_offset} limit={@paginator_limit} count={95} size={2} change_page="change_page" />
