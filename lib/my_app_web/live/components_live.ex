@@ -40,7 +40,6 @@ defmodule MyAppWeb.ComponentsLive do
             form={f}
             field={:test_clearable}
             value="Test"
-            class=""
           />
         </.form>
       </.components_container>

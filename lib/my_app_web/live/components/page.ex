@@ -41,9 +41,9 @@ defmodule MyAppWeb.Page do
         path: Routes.components_path(MyAppWeb.Endpoint, :index)
       },
       %{
-        id: "resource_data_tables",
-        label: "Resource Data Tables",
-        path: Routes.resource_data_tables_path(MyAppWeb.Endpoint, :index)
+        id: "resource_loader",
+        label: "Resource Loader",
+        path: Routes.resource_loader_path(MyAppWeb.Endpoint, :index)
       },
       %{
         id: "temporary_assigns",

@@ -1,24 +1,16 @@
-defmodule MyAppWeb.ResourceDataTablesLive do
+defmodule MyAppWeb.ResourceLoaderLive do
   use MyAppWeb, :live_view
 
   import MyAppWeb.Page
   import MyAppWeb.Table
-  # import MyAppWeb.Form
-  # import MyAppWeb.ResourceDataTable.Components
-
-  # def mount(_params, _session, socket) do
-  #   socket = assign(socket, :messages, load_some_messages(socket))
-
-  #   {:ok, socket, temporary_assigns: [messages: []]}
-  # end
 
   def render(assigns) do
     ~H"""
-    <.wrapper current_menu="resource_data_tables" title="Resource Data Tables">
+    <.wrapper current_menu="resource_loader" title="Resource Loader">
       <.h1>Simple</.h1>
       <.live_component
-        module={MyAppWeb.ResourceDataTable}
-        id="simple_events_table"
+        module={MyAppWeb.ResourceLoader}
+        id="simple_events_loader"
         api={MyApp.Calendar}
         resource={MyApp.Calendar.Event}
         let={items}
@@ -36,8 +28,8 @@ defmodule MyAppWeb.ResourceDataTablesLive do
 
       <.h1>Pagination</.h1>
       <.live_component
-        module={MyAppWeb.ResourceDataTable}
-        id="paginated_events_table"
+        module={MyAppWeb.ResourceLoader}
+        id="paginated_events_loader"
         api={MyApp.Calendar}
         resource={MyApp.Calendar.Event}
         let={items}
@@ -56,8 +48,8 @@ defmodule MyAppWeb.ResourceDataTablesLive do
 
       <.h1>Filter</.h1>
       <.live_component
-        module={MyAppWeb.ResourceDataTable}
-        id="filter_events_table"
+        module={MyAppWeb.ResourceLoader}
+        id="filter_events_loader"
         api={MyApp.Calendar}
         resource={MyApp.Calendar.Event}
         let={items}
@@ -78,8 +70,8 @@ defmodule MyAppWeb.ResourceDataTablesLive do
 
       <.h1>Sort</.h1>
       <.live_component
-        module={MyAppWeb.ResourceDataTable}
-        id="sort_events_table"
+        module={MyAppWeb.ResourceLoader}
+        id="sort_events_loader"
         api={MyApp.Calendar}
         resource={MyApp.Calendar.Event}
         let={items}
@@ -102,8 +94,8 @@ defmodule MyAppWeb.ResourceDataTablesLive do
 
       <.h1>The Lot and Session Storage</.h1>
       <.live_component
-        module={MyAppWeb.ResourceDataTable}
-        id="the_lot_events_table"
+        module={MyAppWeb.ResourceLoader}
+        id="the_lot_events_loader"
         api={MyApp.Calendar}
         resource={MyApp.Calendar.Event}
         let={items}
@@ -119,7 +111,7 @@ defmodule MyAppWeb.ResourceDataTablesLive do
         </.data_table>
 
         <:filter field={:keyword} type="text" placeholder="Keyword" />
-        <:filter field={:other} type="text" placeholder="Other" label="Label" />
+        <:filter field={:other} type="text" placeholder="Other" />
         <:filter field={:some_custom} type="custom" let={ctx} normalize="integer">
           <%= number_input ctx.form, ctx.field, value: ctx.value, autocomplete: "off", placeholder: "Custom" %>
         </:filter>
@@ -132,7 +124,7 @@ defmodule MyAppWeb.ResourceDataTablesLive do
 
         <:pagination page_size={1} />
 
-        <:session key="resource_data_table_the_lot" id={@session_id} />
+        <:session key="resource_loader_the_lot" id={@session_id} />
       </.live_component>
     </.wrapper>
     """

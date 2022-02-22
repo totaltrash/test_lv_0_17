@@ -1,4 +1,4 @@
-defmodule MyAppWeb.ResourceDataTable do
+defmodule MyAppWeb.ResourceLoader do
   use MyAppWeb, :live_component
 
   alias MyAppWeb.Session
@@ -20,7 +20,7 @@ defmodule MyAppWeb.ResourceDataTable do
 
       # Default values for optional assigns
       |> assign_new(:class, fn -> nil end)
-      |> assign_new(:action, fn -> :data_table end)
+      |> assign_new(:action, fn -> :resource_loader end)
 
       # Default optional slots
       |> assign_new(:pagination, fn -> nil end)

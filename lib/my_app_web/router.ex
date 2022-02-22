@@ -25,7 +25,7 @@ defmodule MyAppWeb.Router do
       live "/components/confirm_modal", ComponentsLive, :show_confirm_modal
       live "/components/form_modal", ComponentsLive, :show_form_modal
       live "/components/custom_modal", ComponentsLive, :show_custom_modal
-      live "/resourcedatatables", ResourceDataTablesLive, :index
+      live "/resourceloader", ResourceLoaderLive, :index
       live "/temporaryassigns", TemporaryAssignsLive, :index
       live "/timestamps", TimestampsLive, :index
       live "/timestamps/show/:id", TimestampsLive, :show

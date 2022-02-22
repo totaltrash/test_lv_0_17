@@ -24,7 +24,7 @@ defmodule MyApp.Calendar.Event do
   end
 
   actions do
-    read :data_table do
+    read :resource_loader do
       pagination(offset?: true, countable: true)
 
       argument(:filter, :map, allow_nil?: true, default: %{keyword: "", active: true})

@@ -6,20 +6,9 @@ WIP - todo
 
 Finish handling all assigns passed to clearable_text_input, as per Surface version
 
-Finish ResourceDataTable, add active checkbox, events handlers etc
-
-Check event handlers (change page etc) don't leak/collide. We have to be able to handle multiple data tables embedded in one live view
-
 ResourceDataTable:
 
-* Finish filter:
-  - implement filter reset (assigns default filter map to filter map)
-* Implement session
-* Toolbar/buttons?
 * Document all assigns, including slots. Ensure all are working as expected
-* Look for disabled assigns and remove/implement
-* Rename
-* Optional labels
 
 Issues
 ------
@@ -40,8 +29,16 @@ Table
 
 Paginator
 
-  * Some wrapper classes applied (top border, white background). This should be left to the parent to define?
+  * Some wrapper classes applied (white background). This should be left to the parent to define?
   * change_page_target is necessary for when the paginator is used by components... but should the change_page assign be able to accept a tuple `{@myself, "change_page"}` as well as just an event name for when used by live views?
+
+Opportunities for improvement
+-----------------------------
+
+ResourceDataTable:
+
+* Toolbar/buttons?
+* Implement filter reset on resource loader? (assigns default filter map to filter map)
 
 Sizes
 -----

@@ -78,7 +78,7 @@ defmodule MyAppWeb.Paginator do
 
     ~H"""
     <%= if @enabled and not @selected do %>
-      <a phx-click={@click} phx-target={@click_target} phx-value-page={@page} phx-page-loading href="#" class={paginator_item_class(@enabled, @selected, @hide_on_mobile)}>
+      <a phx-click={@click} phx-target={@click_target} phx-value-page={@page} href="#" class={paginator_item_class(@enabled, @selected, @hide_on_mobile)}>
         <.paginator_item_label icon={@icon} page={@page} />
       </a>
     <% else %>
