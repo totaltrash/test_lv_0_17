@@ -72,7 +72,7 @@ defmodule MyAppWeb.ResourceDataTablesLive do
           </:col>
         </.data_table>
 
-        <:filter field={:keyword} type="text" placeholder="Filter" />
+        <:filter field={:keyword} type="text" placeholder="Keyword" />
         <:filter field={:active} type="checkbox" default={true} label="Active?" />
       </.live_component>
 
@@ -100,7 +100,7 @@ defmodule MyAppWeb.ResourceDataTablesLive do
         <:sort label="Start time Desc" sort={[start_on: :desc]} />
       </.live_component>
 
-      <.h1>The Lot</.h1>
+      <.h1>The Lot and Session Storage</.h1>
       <.live_component
         module={MyAppWeb.ResourceDataTable}
         id="the_lot_events_table"
@@ -118,12 +118,12 @@ defmodule MyAppWeb.ResourceDataTablesLive do
           </:col>
         </.data_table>
 
-        <:filter field={:keyword} type="text" placeholder="Filter" />
+        <:filter field={:keyword} type="text" placeholder="Keyword" />
         <:filter field={:other} type="text" placeholder="Other" label="Label" />
-        <:filter field={:active} type="checkbox" default={true} label="Active?" />
         <:filter field={:some_custom} type="custom" let={ctx} normalize="integer">
-          <%= number_input ctx.form, ctx.field, value: ctx.value, autocomplete: "off", class: "w-64" %>
+          <%= number_input ctx.form, ctx.field, value: ctx.value, autocomplete: "off", placeholder: "Custom" %>
         </:filter>
+        <:filter field={:active} type="checkbox" default={true} label="Active?" />
 
         <:sort label="Title Asc" sort={[title: :asc]} />
         <:sort label="Title Desc" sort={[title: :desc]} />

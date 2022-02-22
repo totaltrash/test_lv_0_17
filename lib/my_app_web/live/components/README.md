@@ -19,7 +19,7 @@ ResourceDataTable:
 * Document all assigns, including slots. Ensure all are working as expected
 * Look for disabled assigns and remove/implement
 * Rename
-
+* Optional labels
 
 Issues
 ------

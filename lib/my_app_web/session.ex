@@ -36,8 +36,8 @@ defmodule MyAppWeb.Session do
     |> Ash.Changeset.for_update(:update, %{value: Map.put(session.value, key, value)})
     |> @api.update!()
 
-    # what to return ? the value for chaining???
-    :ok
+    # what to return ? the session_id for chaining???
+    session_id
   end
 
   defp get_session_resource(session_id) do

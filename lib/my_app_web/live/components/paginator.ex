@@ -22,7 +22,7 @@ defmodule MyAppWeb.Paginator do
       |> assign(record_range_end: min(offset + limit, count))
 
     ~H"""
-      <div class="bg-white py-3 flex items-center justify-between border-t border-gray-200 px-0 md:px-6" data-role="paginator">
+      <div class="bg-white py-3 flex items-center justify-between px-4 sm:px-6" data-role="paginator">
         <div class="md:flex-1 md:flex md:items-center md:justify-between md:gap-4">
           <div class="hidden md:block">
             <p class="text-sm text-gray-700">
