@@ -7,6 +7,38 @@ defmodule MyAppWeb.ResourceLoader do
 
   @default_pagination_page_size 10
 
+  # assigns:
+  #     :id         required: true, unique DOM id to use to identify elements within the component
+  #     :api        required: true, module
+  #     :resource   required: true, module
+  #     :class      required: false, default: nil, optional classes to apply to the outer div
+  #
+  # slots:
+  #   inner_block   required: true, contents to display, passed a list of results
+  #
+  #   filter:       required: false, default: []
+  #     field:      required: true, atom, id of the field
+  #     type:       required: true, atom, options: [:text, :checkbox, :custom]
+  #     normalize:  required: false, string, options: ["integer", "boolean"], how to normalize the param before querying and passing back into the form
+  #     default:    required: false, any, default value to show in the filter, used to derive the default filter applied to the results
+  #     if type == "text"
+  #       placeholder:  required: false, optional placeholder to display in the text box
+  #     if type == "checkbox"
+  #       label:        required: false, optional label to display next to the checkbox
+  #     if type == "custom"
+  #       inner_block:  required: true, passes in a context map containing :form, :field, and :value keys
+  #
+  #   sort:
+  #     label:      required: true, string, label to display in sort select
+  #     sort:       required: true, list, keyword list to pass to Ash Query
+  #
+  #   pagination:
+  #     page_size:  required: false, integer, default: 10, number of results to show on a page
+  #
+  #   session:
+  #     key:        required: true, string, unique key to use to store the filter, sort and pagination settings into the session
+  #     id:         required: true, string, unique session_id, pull from assigns @session_id
+
   def mount(socket) do
     {:ok, socket, temporary_assigns: [results: nil]}
   end
@@ -186,7 +218,7 @@ defmodule MyAppWeb.ResourceLoader do
                 phx-change="filter"
                 phx-submit="filter"
                 phx-target={@myself}
-                class="flex flex-col md:flex-row md:items-center gap-1 md:gap-3 lg:gap-5"
+                class="flex flex-col md:flex-row md:items-center gap-1 md:gap-3"
               >
                 <%= for filter <- @filter do %>
                   <.filter_control
@@ -224,8 +256,7 @@ defmodule MyAppWeb.ResourceLoader do
           limit={@page.limit}
           count={@page.count}
           size={3}
-          change_page="change_page"
-          change_page_target={@myself}
+          change_page={{@myself, "change_page"}}
         />
       <% end %>
     </div>

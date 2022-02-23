@@ -1,38 +1,11 @@
 defmodule MyAppWeb.Dropdown do
   use Phoenix.Component
+
   import Heroicons.LiveView
   import MyAppWeb.Button
   import MyAppWeb.Link
+
   alias Phoenix.LiveView.JS
-
-  defp toggle_dropdown(id, js \\ %JS{}) do
-    js
-    |> JS.toggle(
-      to: "##{id}_dropdown",
-      in: {
-        "transition ease-out duration-100",
-        "opacity-0 scale-95",
-        "opacity-100 scale-100"
-      },
-      out: {
-        "transition ease-in duration-75",
-        "opacity-100 scale-100",
-        "opacity-0 scale-95"
-      }
-    )
-  end
-
-  defp hide_dropdown(id, js \\ %JS{}) do
-    js
-    |> JS.hide(
-      to: "##{id}_dropdown",
-      transition: {
-        "transition ease-in duration-75",
-        "opacity-100 scale-100",
-        "opacity-0 scale-95"
-      }
-    )
-  end
 
   # assigns:
   #     :id           required: true (dom id for the dropdown, required as it is used by JS to toggle dropdown contents)
@@ -117,6 +90,35 @@ defmodule MyAppWeb.Dropdown do
     ~H"""
     <.icon name={@icon} type="solid" class="h-4 w-4 -ml-1 mr-2 text-gray-500" />
     """
+  end
+
+  defp toggle_dropdown(id, js \\ %JS{}) do
+    js
+    |> JS.toggle(
+      to: "##{id}_dropdown",
+      in: {
+        "transition ease-out duration-100",
+        "opacity-0 scale-95",
+        "opacity-100 scale-100"
+      },
+      out: {
+        "transition ease-in duration-75",
+        "opacity-100 scale-100",
+        "opacity-0 scale-95"
+      }
+    )
+  end
+
+  defp hide_dropdown(id, js \\ %JS{}) do
+    js
+    |> JS.hide(
+      to: "##{id}_dropdown",
+      transition: {
+        "transition ease-in duration-75",
+        "opacity-100 scale-100",
+        "opacity-0 scale-95"
+      }
+    )
   end
 
   defp dropdown_margin("down"), do: "mt-2"

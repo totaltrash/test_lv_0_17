@@ -2,6 +2,10 @@ defmodule MyAppWeb.Icon do
   use Phoenix.Component
   import Heroicons.LiveView
 
+  # assigns:
+  #     :value        required: true, boolean
+  #     :class        required: false, default: "h-6 w-6"
+  #     :type         required: false, default: "outline", options: ["outline", "solid"]
   def boolean_icon(assigns) do
     assigns =
       assigns

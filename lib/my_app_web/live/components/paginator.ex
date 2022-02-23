@@ -3,6 +3,13 @@ defmodule MyAppWeb.Paginator do
 
   import Heroicons.LiveView
 
+  # assigns:
+  #     :offset       required: true
+  #     :limit        required: true
+  #     :count        required: true
+  #     :size         required: true
+  #     :change_page  required: true, string (event_name), or {target, event_name}, when using the handler in a live component
+
   def paginator(assigns) do
     %{offset: offset, limit: limit, count: count, size: size} = assigns
     page_count = page_count(count, limit)
@@ -11,7 +18,6 @@ defmodule MyAppWeb.Paginator do
     assigns =
       assigns
       |> assign_new(:limit, fn -> 10 end)
-      |> assign_new(:change_page_target, fn -> nil end)
       |> assign(page: page)
       |> assign(page_count: page_count)
       |> assign(previous_pages: Enum.filter((page - size)..(page - 1), &(&1 > 0)))
@@ -20,6 +26,7 @@ defmodule MyAppWeb.Paginator do
       |> assign(show_next_range: page + size < page_count)
       |> assign(record_range_start: min(offset + 1, count))
       |> assign(record_range_end: min(offset + limit, count))
+      |> assign_change_page()
 
     ~H"""
       <div class="bg-white py-3 flex items-center justify-between px-4 sm:px-6" data-role="paginator">
@@ -53,6 +60,18 @@ defmodule MyAppWeb.Paginator do
         </div>
       </div>
     """
+  end
+
+  defp assign_change_page(%{change_page: {change_page_target, change_page}} = assigns) do
+    assigns
+    |> assign(change_page: change_page)
+    |> assign(change_page_target: change_page_target)
+  end
+
+  defp assign_change_page(%{change_page: change_page} = assigns) do
+    assigns
+    |> assign(change_page: change_page)
+    |> assign(change_page_target: nil)
   end
 
   defp page_count(0, _limit), do: 1

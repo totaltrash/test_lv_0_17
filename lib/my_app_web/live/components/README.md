@@ -1,15 +1,6 @@
 Components
 ==========
 
-WIP - todo
-----------
-
-Finish handling all assigns passed to clearable_text_input, as per Surface version
-
-ResourceDataTable:
-
-* Document all assigns, including slots. Ensure all are working as expected
-
 Issues
 ------
 
@@ -18,8 +9,6 @@ Lots of duplication in Button.button:
   * skip list in assigns_to_attributes
   * assigning defaults
   * rendering content within the button or a
-
-Session keys: atoms or strings? Atoms at mo, but what's the point? Lots of converting strings to atoms just to store a session value?
 
 .format_datetime is duplicated on components_live and timestamps_live - MOVED TO Page module... for now along with .h1, .h2 and .components_container. Not sure where all this should end up?
 
@@ -30,7 +19,6 @@ Table
 Paginator
 
   * Some wrapper classes applied (white background). This should be left to the parent to define?
-  * change_page_target is necessary for when the paginator is used by components... but should the change_page assign be able to accept a tuple `{@myself, "change_page"}` as well as just an event name for when used by live views?
 
 Opportunities for improvement
 -----------------------------
