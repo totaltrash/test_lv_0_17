@@ -1,9 +1,9 @@
-defmodule MyAppWeb.Dropdown do
+defmodule IFixComponents.Dropdown do
   use Phoenix.Component
 
   import Heroicons.LiveView
-  import MyAppWeb.Button
-  import MyAppWeb.Link
+  import IFixComponents.Button
+  import IFixComponents.Link
 
   alias Phoenix.LiveView.JS
 

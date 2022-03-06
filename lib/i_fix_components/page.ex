@@ -1,4 +1,4 @@
-defmodule MyAppWeb.Page do
+defmodule IFixComponents.Page do
   use Phoenix.Component
   import Heroicons.LiveView
   alias MyAppWeb.Router.Helpers, as: Routes
@@ -80,7 +80,7 @@ defmodule MyAppWeb.Page do
                 <div class="ml-10 flex items-baseline space-x-4">
                   <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
                   <%= for menu_item <- menu_items() do %>
-                    <%= live_redirect(menu_item.label, to: menu_item.path, class: get_item_class(menu_item, @current_menu)) %>
+                    <%= live_patch(menu_item.label, to: menu_item.path, class: get_item_class(menu_item, @current_menu)) %>
                   <% end %>
                 </div>
               </div>
@@ -170,7 +170,7 @@ defmodule MyAppWeb.Page do
           <div class="hidden z-50 bg-gray-800 origin-top absolute w-full" id="mobile-menu" phx-remove={JS.hide(transition: {"transition ease-in duration-75", "scale-y-100", "scale-y-0"})}>
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               <%= for menu_item <- menu_items() do %>
-                <%= live_redirect(menu_item.label, to: menu_item.path, class: get_mobile_item_class(menu_item, @current_menu)) %>
+                <%= live_patch(menu_item.label, to: menu_item.path, class: get_mobile_item_class(menu_item, @current_menu)) %>
               <% end %>
             </div>
             <div class="pt-4 pb-3 border-t border-gray-700">

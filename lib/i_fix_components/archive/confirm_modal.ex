@@ -1,6 +1,6 @@
-defmodule MyAppWeb.ConfirmModal do
+defmodule IFixComponents.ConfirmModal do
   @moduledoc """
-  DEPRECATED - left it here so can update `MyAppWeb.Modal` when/if phx-mount comes
+  DEPRECATED - left it here so can update `IFixComponentsModal` when/if phx-mount comes
   along (update the transitions in `hide modal`, and implement the tailwind transition
   classes in `show_modal`)
   """

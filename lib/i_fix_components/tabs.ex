@@ -1,4 +1,4 @@
-defmodule MyAppWeb.Tabs do
+defmodule IFixComponents.Tabs do
   use Phoenix.Component
 
   import Heroicons.LiveView

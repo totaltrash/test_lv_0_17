@@ -1,8 +1,8 @@
-defmodule MyAppWeb.Modal do
+defmodule IFixComponents.Modal do
   use Phoenix.Component
   import Heroicons.LiveView
   alias Phoenix.LiveView.JS
-  alias MyAppWeb.Button
+  alias IFixComponents.Button
 
   @doc """
   Creates an opinionated alert modal. Icons, colours, and buttons are set

@@ -1,9 +1,9 @@
-defmodule MyAppWeb.ResourceLoader do
+defmodule IFixComponents.ResourceLoader do
   use MyAppWeb, :live_component
 
   alias MyAppWeb.Session
-  import MyAppWeb.Paginator
-  import MyAppWeb.Form
+  import IFixComponents.Paginator
+  import IFixComponents.Form
 
   @default_pagination_page_size 10
 

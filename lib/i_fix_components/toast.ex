@@ -1,4 +1,4 @@
-defmodule MyAppWeb.Toast do
+defmodule IFixComponents.Toast do
   use Phoenix.Component
   alias Phoenix.LiveView.JS
   import Heroicons.LiveView

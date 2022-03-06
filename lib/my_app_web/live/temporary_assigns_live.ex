@@ -1,7 +1,7 @@
 defmodule MyAppWeb.TemporaryAssignsLive do
   use MyAppWeb, :live_view
 
-  alias MyAppWeb.Page
+  import IFixComponents.Page
 
   def mount(_params, _session, socket) do
     socket = assign(socket, :messages, load_some_messages(socket))
@@ -11,7 +11,7 @@ defmodule MyAppWeb.TemporaryAssignsLive do
 
   def render(assigns) do
     ~H"""
-    <Page.wrapper current_menu="temporary_assigns" title="Temporary Assigns">
+    <.wrapper current_menu="temporary_assigns" title="Temporary Assigns">
       <div class="flex flex-wrap items-center gap-4">
         <button phx-click="add_temporary_assign" class="flex items-center justify-center px-4 py-2 border border-transparent text-base font-medium rounded text-white md:py-3 md:text-lg md:px-6 bg-green-600 hover:bg-green-700">
           Add Temporary Assign
@@ -24,7 +24,7 @@ defmodule MyAppWeb.TemporaryAssignsLive do
           </li>
         <% end %>
       </ul>
-    </Page.wrapper>
+    </.wrapper>
     """
   end
 

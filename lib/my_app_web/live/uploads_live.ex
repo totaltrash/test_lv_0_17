@@ -1,8 +1,8 @@
 defmodule MyAppWeb.UploadsLive do
   use MyAppWeb, :live_view
 
-  import MyAppWeb.Page
-  import MyAppWeb.Button
+  import IFixComponents.Page
+  import IFixComponents.Button
 
   def mount(_params, _session, socket) do
     {:ok,

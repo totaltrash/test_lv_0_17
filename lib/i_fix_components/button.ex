@@ -1,7 +1,7 @@
-defmodule MyAppWeb.Button do
+defmodule IFixComponents.Button do
   use Phoenix.Component
 
-  import MyAppWeb.Link
+  import IFixComponents.Link
   import Heroicons.LiveView
 
   # assigns:

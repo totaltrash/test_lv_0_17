@@ -1,4 +1,4 @@
-defmodule MyAppWeb.Paginator do
+defmodule IFixComponents.Paginator do
   use Phoenix.Component
 
   import Heroicons.LiveView

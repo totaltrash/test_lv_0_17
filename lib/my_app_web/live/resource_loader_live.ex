@@ -1,15 +1,15 @@
 defmodule MyAppWeb.ResourceLoaderLive do
   use MyAppWeb, :live_view
 
-  import MyAppWeb.Page
-  import MyAppWeb.Table
+  import IFixComponents.Page
+  import IFixComponents.Table
 
   def render(assigns) do
     ~H"""
     <.wrapper current_menu="resource_loader" title="Resource Loader">
       <.h1>Simple</.h1>
       <.live_component
-        module={MyAppWeb.ResourceLoader}
+        module={IFixComponents.ResourceLoader}
         id="simple_events_loader"
         api={MyApp.Calendar}
         resource={MyApp.Calendar.Event}
@@ -28,7 +28,7 @@ defmodule MyAppWeb.ResourceLoaderLive do
 
       <.h1>Pagination</.h1>
       <.live_component
-        module={MyAppWeb.ResourceLoader}
+        module={IFixComponents.ResourceLoader}
         id="paginated_events_loader"
         api={MyApp.Calendar}
         resource={MyApp.Calendar.Event}
@@ -48,7 +48,7 @@ defmodule MyAppWeb.ResourceLoaderLive do
 
       <.h1>Filter</.h1>
       <.live_component
-        module={MyAppWeb.ResourceLoader}
+        module={IFixComponents.ResourceLoader}
         id="filter_events_loader"
         api={MyApp.Calendar}
         resource={MyApp.Calendar.Event}
@@ -70,7 +70,7 @@ defmodule MyAppWeb.ResourceLoaderLive do
 
       <.h1>Sort</.h1>
       <.live_component
-        module={MyAppWeb.ResourceLoader}
+        module={IFixComponents.ResourceLoader}
         id="sort_events_loader"
         api={MyApp.Calendar}
         resource={MyApp.Calendar.Event}
@@ -94,7 +94,7 @@ defmodule MyAppWeb.ResourceLoaderLive do
 
       <.h1>The Lot and Session Storage</.h1>
       <.live_component
-        module={MyAppWeb.ResourceLoader}
+        module={IFixComponents.ResourceLoader}
         id="the_lot_events_loader"
         api={MyApp.Calendar}
         resource={MyApp.Calendar.Event}

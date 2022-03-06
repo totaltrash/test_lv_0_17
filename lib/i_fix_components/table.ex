@@ -1,4 +1,4 @@
-defmodule MyAppWeb.Table do
+defmodule IFixComponents.Table do
   use Phoenix.Component
 
   # assigns:

@@ -3,23 +3,23 @@ defmodule MyAppWeb.ComponentsLive do
 
   @topic "messages"
 
-  import MyAppWeb.Page
-  import MyAppWeb.Modal
-  import MyAppWeb.Button
-  import MyAppWeb.Link
-  import MyAppWeb.Form
-  import MyAppWeb.Table
-  import MyAppWeb.Icon
-  import MyAppWeb.Dropdown
-  import MyAppWeb.Paginator
-  import MyAppWeb.Tabs
+  import IFixComponents.Page
+  import IFixComponents.Modal
+  import IFixComponents.Button
+  import IFixComponents.Link
+  import IFixComponents.Form
+  import IFixComponents.Icon
+  import IFixComponents.Dropdown
+  import IFixComponents.Paginator
+  import IFixComponents.Tabs
+
+  import MyAppWeb.ComponentsLive.Components
 
   def mount(_, _session, socket) do
     MyAppWeb.Endpoint.subscribe(@topic)
 
     socket =
       socket
-      |> assign(data_table_items: [%{id: 1, name: "Some Name"}])
       |> assign(paginator_offset: 0)
       |> assign(paginator_limit: 10)
 
@@ -29,6 +29,9 @@ defmodule MyAppWeb.ComponentsLive do
   def render(assigns) do
     ~H"""
     <.wrapper current_menu="components" title="Components">
+      <.components_container>
+        <.components_nav current="components" />
+      </.components_container>
       <.h1>Tabs (Client Side)</.h1>
       <div class="flex gap-4 mb-8 flex-col md:flex-row">
         <.tabs id="tabs_test_1">
@@ -87,16 +90,6 @@ defmodule MyAppWeb.ComponentsLive do
         <.paginator offset={@paginator_offset} limit={@paginator_limit} count={95} size={2} change_page="change_page" />
       </.components_container>
 
-      <.h1>Clearable Text Input</.h1>
-      <.components_container>
-        <.form let={f} for={:form} phx-submit="form_submit">
-          <.clearable_text_input
-            form={f}
-            field={:test_clearable}
-            value="Test"
-          />
-        </.form>
-      </.components_container>
       <.h1>Modals</.h1>
       <.components_container>
         <.button type="link" color="primary" href={Routes.components_path(MyAppWeb.Endpoint, :show_alert_modal)} label="Alert Modal" />
@@ -310,44 +303,6 @@ defmodule MyAppWeb.ComponentsLive do
         </.dropdown>
       </.components_container>
 
-      <.h1>Tables</.h1>
-      <.h2>Simple Table</.h2>
-      <.table class="mb-8">
-        <.head>
-          <.row>
-            <.th class="w-1/4">Heading 1</.th>
-            <.th>Heading 2</.th>
-          </.row>
-        </.head>
-        <.body>
-          <.row>
-            <.td>Row 1</.td>
-            <.td>Something here</.td>
-          </.row>
-          <.row class="bg-red-700 text-white">
-            <.td>Row 2</.td>
-            <.td>Something here</.td>
-          </.row>
-        </.body>
-      </.table>
-      <.h2>Data Table</.h2>
-      <.data_table items={@data_table_items} class="mb-8">
-        <:col let={item} label="ID" th_class="w-1/4">
-          <%= item.id %>
-        </:col>
-        <:col let={item} label="Name">
-          <%= item.name %>
-        </:col>
-      </.data_table>
-      <.h2>Empty Data Table</.h2>
-      <.data_table items={[]} class="mb-8">
-        <:col let={item} label="ID" th_class="w-1/4">
-          <%= item.id %>
-        </:col>
-        <:col let={item} label="Name">
-          <%= item.name %>
-        </:col>
-      </.data_table>
       <.h1>Boolean Icon</.h1>
       <.components_container>
         <.boolean_icon value={true} />

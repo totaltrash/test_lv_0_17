@@ -1,9 +1,9 @@
 defmodule MyAppWeb.TimestampsLive do
   use MyAppWeb, :live_view
 
-  import MyAppWeb.Page
-  import MyAppWeb.Modal
-  import MyAppWeb.Form
+  import IFixComponents.Page
+  import IFixComponents.Modal
+  import IFixComponents.Form
 
   def mount(_params, _session, socket) do
     socket =

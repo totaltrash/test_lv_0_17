@@ -1,4 +1,4 @@
-defmodule MyAppWeb.Form do
+defmodule IFixComponents.Form do
   use Phoenix.Component
   import Heroicons.LiveView
   import Phoenix.HTML.Form
@@ -7,6 +7,19 @@ defmodule MyAppWeb.Form do
     ~H"""
     <div class="my-4">
       <%= render_slot(@inner_block) %>
+    </div>
+    """
+  end
+
+  def checkbox_array(assigns) do
+    ~H"""
+    <div class="flex flex-col gap-1">
+      <%= for {label, key} <- @options do %>
+        <div class="flex flex-row items-center">
+          <%= checkbox @form, @field, id: input_id(@form, @field, key), name: input_name(@form, @field) <> "[]", value: key, class: "mr-2" %>
+          <%= label @form, @field, label, for: input_id(@form, @field, key) %>
+        </div>
+      <% end %>
     </div>
     """
   end

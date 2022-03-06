@@ -1,4 +1,4 @@
-defmodule MyAppWeb.Link do
+defmodule IFixComponents.Link do
   use Phoenix.Component
 
   # assigns:

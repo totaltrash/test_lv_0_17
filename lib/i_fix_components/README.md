@@ -4,6 +4,12 @@ Components
 Issues
 ------
 
+Remove all references to MyAppWeb. Everything in here is supposed to be reuseable:
+
+  * Push app specific stuff out to wrappers (pages displayed in Page.wrapper nav bar)
+  * What to do with Session? defined in MyAppWeb, but passed into resource loaded as an option, or by config????
+
+
 Lots of duplication in Button.button:
 
   * skip list in assigns_to_attributes

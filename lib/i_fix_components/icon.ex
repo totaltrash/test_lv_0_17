@@ -1,4 +1,4 @@
-defmodule MyAppWeb.Icon do
+defmodule IFixComponents.Icon do
   use Phoenix.Component
   import Heroicons.LiveView
 
