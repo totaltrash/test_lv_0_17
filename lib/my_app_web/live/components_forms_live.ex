@@ -44,10 +44,26 @@ defmodule MyAppWeb.ComponentsFormsLive do
       </.components_container>
       <.h2>Resource options</.h2>
       <div class="grid grid-cols-3 gap-4 mb-8">
-        <.form let={f} for={@form} phx-submit="checkbox_array_submit" phx-change="checkbox_array_change">
+        <.form
+          let={f}
+          for={@form}
+          phx-submit="checkbox_array_submit"
+          phx-change="checkbox_array_change"
+          class="bg-white p-6 rounded"
+        >
+          <h2 class="text-gray-400 mb-2 font-bold tracking-wide uppercase">Add Post</h2>
+          <%= label(f, :title) %>
           <%= text_input(f, :title, autocomplete: "off") %>
+          <%= for error <- Keyword.get_values(f.errors, :title) do %>
+            <span class="block text-red-700 text-sm">
+              <%= translate_error(error) %>
+            </span>
+          <% end %>
+          <%= label(f, :tags) %>
           <.checkbox_array form={f} field={:tags} options={@tags} />
-          <.button type="submit" label="Submit" color="primary" />
+          <div class="my-4">
+            <.button type="submit" label="Submit" color="primary" />
+          </div>
         </.form>
         <.live_component
           module={IFixComponents.ResourceLoader}
@@ -65,7 +81,7 @@ defmodule MyAppWeb.ComponentsFormsLive do
               <%= Enum.map(post.tags, fn %{title: title} -> title end) |> Enum.join(", ") %>
             </:col>
           </.data_table>
-          <:pagination page_size={5} />
+          <:pagination size={5} range={1} />
         </.live_component>
       </div>
       <.h1>Clearable Text Input</.h1>

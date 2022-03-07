@@ -7,11 +7,11 @@ defmodule IFixComponents.Paginator do
   #     :offset       required: true
   #     :limit        required: true
   #     :count        required: true
-  #     :size         required: true
+  #     :range        required: true, maximum number of pagination buttons either side of the current page
   #     :change_page  required: true, string (event_name), or {target, event_name}, when using the handler in a live component
 
   def paginator(assigns) do
-    %{offset: offset, limit: limit, count: count, size: size} = assigns
+    %{offset: offset, limit: limit, count: count, range: range} = assigns
     page_count = page_count(count, limit)
     page = div(offset + limit, limit)
 
@@ -20,10 +20,10 @@ defmodule IFixComponents.Paginator do
       |> assign_new(:limit, fn -> 10 end)
       |> assign(page: page)
       |> assign(page_count: page_count)
-      |> assign(previous_pages: Enum.filter((page - size)..(page - 1), &(&1 > 0)))
-      |> assign(show_previous_range: page - 1 > size)
-      |> assign(next_pages: Enum.filter((page + 1)..(page + size), &(&1 <= page_count)))
-      |> assign(show_next_range: page + size < page_count)
+      |> assign(previous_pages: Enum.filter((page - range)..(page - 1), &(&1 > 0)))
+      |> assign(show_previous_range: page - 1 > range)
+      |> assign(next_pages: Enum.filter((page + 1)..(page + range), &(&1 <= page_count)))
+      |> assign(show_next_range: page + range < page_count)
       |> assign(record_range_start: min(offset + 1, count))
       |> assign(record_range_end: min(offset + limit, count))
       |> assign_change_page()

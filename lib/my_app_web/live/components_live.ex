@@ -87,7 +87,7 @@ defmodule MyAppWeb.ComponentsLive do
 
       <.h1>Paginator</.h1>
       <.components_container>
-        <.paginator offset={@paginator_offset} limit={@paginator_limit} count={95} size={2} change_page="change_page" />
+        <.paginator offset={@paginator_offset} limit={@paginator_limit} count={95} range={3} change_page="change_page" />
       </.components_container>
 
       <.h1>Modals</.h1>

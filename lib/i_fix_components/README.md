@@ -27,6 +27,7 @@ Table
 
 Paginator
 
+  * Does not work with a range of 0 (ie don't show other pages, just the chevrons and dots). possibly just want a `minimal` prop
   * Some wrapper classes applied (white background). This should be left to the parent to define?
 
 Opportunities for improvement

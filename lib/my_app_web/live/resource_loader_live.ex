@@ -122,7 +122,7 @@ defmodule MyAppWeb.ResourceLoaderLive do
         <:sort label="Start time Asc" sort={[start_on: :asc]} />
         <:sort label="Start time Desc" sort={[start_on: :desc]} />
 
-        <:pagination page_size={1} />
+        <:pagination size={1} />
 
         <:session key="resource_loader_the_lot" id={@session_id} />
       </.live_component>

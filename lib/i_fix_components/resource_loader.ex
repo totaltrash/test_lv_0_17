@@ -6,6 +6,7 @@ defmodule IFixComponents.ResourceLoader do
   import IFixComponents.Form
 
   @default_pagination_page_size 10
+  @default_pagination_page_range 3
 
   # assigns:
   #     :id         required: true, unique DOM id to use to identify elements within the component
@@ -33,7 +34,8 @@ defmodule IFixComponents.ResourceLoader do
   #     sort:       required: true, list, keyword list to pass to Ash Query
   #
   #   pagination:
-  #     page_size:  required: false, integer, default: 10, number of results to show on a page
+  #     size:       required: false, integer, default: 10, number of results to show on a page
+  #     range:      required: false, integer, default: 3, maximum number of pages to show either side of the current page
   #
   #   session:
   #     key:        required: true, string, unique key to use to store the filter, sort and pagination settings into the session
@@ -78,11 +80,13 @@ defmodule IFixComponents.ResourceLoader do
 
   defp assign_pagination_plugin(%{assigns: %{pagination: [pagination_slot | _]}} = socket) do
     page_no = get_session(socket.assigns.session, :page, 1)
-    page_size = pagination_slot[:page_size] || @default_pagination_page_size
+    page_size = pagination_slot[:size] || @default_pagination_page_size
+    page_range = pagination_slot[:range] || @default_pagination_page_range
 
     socket
     |> assign(page_no: page_no)
     |> assign(page_size: page_size)
+    |> assign(page_range: page_range)
   end
 
   defp assign_filter_plugin(%{assigns: %{filter: nil}} = socket) do
@@ -255,7 +259,7 @@ defmodule IFixComponents.ResourceLoader do
           offset={@page.offset}
           limit={@page.limit}
           count={@page.count}
-          size={3}
+          range={@page_range}
           change_page={{@myself, "change_page"}}
         />
       <% end %>
