@@ -7,7 +7,7 @@ defmodule MyAppWeb.ComponentsLive.Components do
 
   def components_nav(assigns) do
     ~H"""
-    <div class="bg-white p-6 rounded w-full">
+    <div class="bg-white px-6 py-3  rounded w-full">
       <.nav current={@current}>
         <:nav_item id="components" label="Components" icon="puzzle" href={Routes.components_path(MyAppWeb.Endpoint, :index)} />
         <:nav_item id="tables" label="Tables" icon="table" href={Routes.components_tables_path(MyAppWeb.Endpoint, :index)} />

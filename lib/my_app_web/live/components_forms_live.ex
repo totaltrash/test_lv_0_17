@@ -4,12 +4,25 @@ defmodule MyAppWeb.ComponentsFormsLive do
   import IFixComponents.Page
   import IFixComponents.Form
   import IFixComponents.Button
+  import IFixComponents.Table
   import MyAppWeb.ComponentsLive.Components
 
   def mount(_, _session, socket) do
+    tags =
+      MyApp.Blog.Tag
+      |> MyApp.Blog.read!()
+      |> Enum.map(fn tag -> {tag.title, tag.id} end)
+
+    form =
+      MyApp.Blog.Post
+      |> AshPhoenix.Form.for_create(:create, api: MyApp.Blog)
+
     socket =
       socket
-      |> assign(options_int_value: [Administrator: 1, User: 2])
+      # |> assign(options_int_value: [%{label: "One", id: 1}, %{label: "Two", id: 2}])
+      |> assign(options_int_value: [One: 1, Two: 2])
+      |> assign(tags: tags)
+      |> assign(form: form)
 
     {:ok, socket}
   end
@@ -22,14 +35,39 @@ defmodule MyAppWeb.ComponentsFormsLive do
       </.components_container>
 
       <.h1>Checkbox Array</.h1>
-      <.h2>Int values</.h2>
+      <.h2>Int options</.h2>
       <.components_container>
         <.form let={f} for={:form} phx-submit="checkbox_array_submit" phx-change="checkbox_array_change">
           <.checkbox_array form={f} field={:roles} options={@options_int_value} />
           <.button type="submit" label="Submit" color="primary" />
         </.form>
       </.components_container>
-
+      <.h2>Resource options</.h2>
+      <div class="grid grid-cols-3 gap-4 mb-8">
+        <.form let={f} for={@form} phx-submit="checkbox_array_submit" phx-change="checkbox_array_change">
+          <%= text_input(f, :title, autocomplete: "off") %>
+          <.checkbox_array form={f} field={:tags} options={@tags} />
+          <.button type="submit" label="Submit" color="primary" />
+        </.form>
+        <.live_component
+          module={IFixComponents.ResourceLoader}
+          id="posts_loader"
+          api={MyApp.Blog}
+          resource={MyApp.Blog.Post}
+          let={items}
+          class="col-span-2"
+        >
+          <.data_table items={items}>
+            <:col label="Title" let={post}>
+              <%= post.title %>
+            </:col>
+            <:col label="Tags" let={post}>
+              <%= Enum.map(post.tags, fn %{title: title} -> title end) |> Enum.join(", ") %>
+            </:col>
+          </.data_table>
+          <:pagination page_size={5} />
+        </.live_component>
+      </div>
       <.h1>Clearable Text Input</.h1>
       <.components_container>
         <.form let={f} for={:form} phx-submit="form_submit">
@@ -40,18 +78,34 @@ defmodule MyAppWeb.ComponentsFormsLive do
           />
         </.form>
       </.components_container>
-
     </.wrapper>
     """
   end
 
-  def handle_event("checkbox_array_change", params, socket) do
+  def handle_event("checkbox_array_change", %{"form" => params}, socket) do
     IO.inspect(params)
+
+    # params = normalize_params(params, socket.assigns)
+    form = socket.assigns.form
+    validated_form = AshPhoenix.Form.validate(form, params, errors: form.submitted_once?)
 
     socket =
       socket
-      |> add_toast(:info, "Changed checkbox array")
+      |> assign(form: validated_form)
 
     {:noreply, socket}
+  end
+
+  def handle_event("checkbox_array_submit", %{"form" => params}, socket) do
+    case AshPhoenix.Form.submit(socket.assigns.form, params: params) do
+      {:ok, _} ->
+        {:noreply,
+         socket
+         |> add_toast(:info, "Post created")
+         |> push_redirect(to: Routes.components_forms_path(socket, :index))}
+
+      {:error, %AshPhoenix.Form{} = form} ->
+        {:noreply, assign(socket, form: form)}
+    end
   end
 end

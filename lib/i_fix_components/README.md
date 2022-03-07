@@ -9,6 +9,9 @@ Remove all references to MyAppWeb. Everything in here is supposed to be reuseabl
   * Push app specific stuff out to wrappers (pages displayed in Page.wrapper nav bar)
   * What to do with Session? defined in MyAppWeb, but passed into resource loaded as an option, or by config????
 
+Add new top nav item called 'Learning' and move temp assigns, timestamps and uploads under that.
+
+Move Message section from components_live into own live view under 'Learning'
 
 Lots of duplication in Button.button:
 
