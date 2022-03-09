@@ -103,6 +103,7 @@ defmodule IFixComponents.Modal do
     <div
       id="modal-container"
       phx-remove={hide_modal()}
+      phx-hook="ScrollLock"
       class="fixed z-10 inset-0 overflow-y-auto"
       aria-labelledby="modal-title"
       role="dialog"

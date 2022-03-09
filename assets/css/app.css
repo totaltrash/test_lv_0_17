@@ -36,6 +36,13 @@
   }
 }
 
+.fix-position {
+  position: fixed;
+  right: 0;
+  left: 0;
+  overflow: hidden;
+}
+
 .fade-in-scale {
   animation: 100ms ease-out 0s normal forwards 1 fade-in-scale-keys;
 }

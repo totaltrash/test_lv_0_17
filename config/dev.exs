@@ -66,6 +66,7 @@ config :my_app, MyAppWeb.Endpoint,
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
+      ~r"lib/i_fix_components/.*(ex)$",
       ~r"lib/my_app_web/(live|views)/.*(ex)$",
       ~r"lib/my_app_web/templates/.*(eex)$"
     ]
